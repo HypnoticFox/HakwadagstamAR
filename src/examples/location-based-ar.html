@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AR.js A-Frame Location-based</title>
+    <script type='text/javascript' src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+    <script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+    <script type='text/javascript' src="https://unpkg.com/aframe-text-geometry-component@0.5.2/dist/aframe-text-geometry-component.min.js"></script>
+    <script type='text/javascript' src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
+    <script type='text/javascript' src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
+    <script>
+        AFRAME.registerComponent('graybox', {
+            init: function() {
+                this.el.addEventListener('click', e => {
+                    console.log(e);
+                    alert('Gray box clicked!');
+                });
+            }
+        });
+
+        AFRAME.registerComponent('greenbox', {
+            init: function() {
+                this.el.addEventListener('click', e => {
+                    console.log(e);
+                    alert('Green box clicked!');
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+
+<a-scene 
+    vr-mode-ui='enabled: false' 
+    arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' 
+    renderer='antialias: true; alpha: true;'
+    cursor='rayOrigin: mouse; fuseTimeout: 0;'
+    raycaster='near: 0; far: 50000'
+    >
+    <a-camera id='camera' 
+        gps-new-camera='gpsMinDistance: 5; simulateLatitude: 52.50756129569016; simulateLongitude:6.09750736459537;' 
+        look-controls-enabled='false' 
+        arjs-device-orientation-controls='smoothingFactor: 0.1'
+        >
+
+        <!-- <a-entity cursor="fuse: true; fuseTimeout: 1500"
+            position="0 0 -1"
+            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+            material="color: black; shader: flat"
+            >
+        </a-entity> -->
+
+    </a-camera>
+    <!-- simulateLatitude: 52.50756129569016; simulateLongitude:6.09750736459537; -->
+
+    <a-assets>
+        <a-asset-item id="defaultFont" src="https://raw.githack.com/supermedium/superframe/master/components/text-geometry/lib/helvetiker_regular.typeface.json"></a-asset-item>
+        <a-asset-item id="animated-fox" src="https://raw.githack.com/KhronosGroup/glTF-Sample-Models/main/2.0/Fox/glTF/Fox.gltf"></a-asset-item>
+    </a-assets>
+
+    <!-- Sassenpoort -->
+    <!-- <a-entity material='color: red' text-geometry="Sassenpoort" gps-new-entity-place="latitude: 52.509642585697506; longitude: 6.095541370719484"></a-entity> -->
+    <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 52.509642585697506; longitude: 6.095541370719484" scale="10 10 10"></a-entity>
+
+    <!-- Park voor mijn huis -->
+    <a-entity greenbox material='color: green' geometry='primitive: box' gps-new-entity-place="latitude: 52.50770893871821; longitude: 6.097938843248748" scale="10 10 10"></a-entity>
+
+    <!-- Achtertuin -->
+    <!-- <a-entity material='color: blue' geometry='primitive: box' gps-new-entity-place="latitude: 52.507577786814664; longitude: 6.0973969520936695" scale="10 10 10"></a-entity> -->
+    <a-entity look-at="[camera]" gps-new-entity-place="latitude: 52.507577786814664; longitude: 6.0973969520936695">
+        <a-entity 
+            text-geometry="value: Achtertuin; size: 3; font: #defaultFont; height: 0.5" 
+            material='color: blue'
+            rotation="0 -45 0"
+            position="0 0 -20"
+        ></a-entity>
+    </a-entity>
+
+    <!-- Direct voor mijn huis -->
+    <a-entity graybox
+        geometry="primitive: box"
+        material="color: gray; shader: flat"
+        gps-new-entity-place="latitude: 52.50749318823318; longitude: 6.097933153405297"
+        scale="10 10 10"
+        >
+    </a-entity>
+    <!-- <a-entity material='color: gray' geometry='primitive: box' gps-new-entity-place="latitude: 52.50749318823318; longitude: 6.097933153405297" scale="10 10 10"></a-entity> -->
+
+    <a-entity look-at="[camera]" gps-new-entity-place="latitude: 52.50747289609733; longitude: 6.097415979163343">
+        <a-entity position="0 -50 -200">
+            <a-entity
+                gltf-model="#animated-fox"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 15000; easing: linear;"
+                animation-mixer="clip: Run; timeScale: 0.7;"
+                >
+            </a-entity>
+        </a-entity>
+    </a-entity>
+    
+</a-scene>
+</body>
+</html>
