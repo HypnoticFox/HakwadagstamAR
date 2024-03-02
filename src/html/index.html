@@ -44,6 +44,8 @@
                 points: Alpine.$persist(0).as('hakwadagstamAR-points'),
                 activeLocations: [],
                 visitedLocations: Alpine.$persist([]).as('hakwadagstamAR-visitedLocations'),
+                activeQuestion: 0,
+                activeLocation: 0,
      
                 toggleArMode() {
                     this.arModeActive = ! this.arModeActive
@@ -56,15 +58,48 @@
                     );
                 },
 
+                getLocationUrl(id){
+                    loc=this.allLocations.filter((location)=>location.id===id)[0];
+                    return "https://www.google.com/maps/dir/?api=1&destination="+loc.latitude+","+loc.longitude;
+                },
+
                 allLocations: [
                     {
                         id: 1,
                         locationSet: 1,
-                        latitide: 52.50770893871821,
+                        latitude: 52.50770893871821,
                         longitude: 6.097938843248748,
                         html: "<a-entity greenbox material='color: green' geometry='primitive: box' gps-new-entity-place='latitude: 52.50770893871821; longitude: 6.097938843248748' scale='10 10 10'></a-entity>"
+                    },
+                    {
+                        id:2,
+                        locationSet:1,
+                        latitude: 52.3733762,
+                        longitude: 6.4591569,
+                        html: ""
                     }
                 ],
+
+                allQuestions:[
+                    {
+                        id: 1,
+                        text: "Wat is 1+1?",
+                        answers: [
+                            {text: "1", correct: false, locationId: 1}, 
+                            {text: "2", correct: true, locationId: 2},
+                            {text: "3", correct: false, locationId: 3}
+                        ]
+                    },
+                    {
+                        id:2,
+                        text: "Geef het goede antwoord",
+                        answers: [
+                            {text: "Dit is goed", correct: true, locationId: 4}, 
+                            {text: "Deze is fout", correct: false, locationId: 5},
+                            {text: "Deze ook", correct: false, locationId: 6}
+                        ]
+                    }
+                ]
             });
 
             Alpine.store('global').setActiveLocationSet(1);
@@ -125,6 +160,44 @@
                 </a-scene>
             </div>
         </template>
+
+        <div x-show="!$store.global.arModeActive" class="container">
+            <h1>Hakwadagstam AR app</h1>
+            <h3>Kies de vraag die je wil beantwoorden</h3>
+            
+            <!--List with all questions-->
+            <div class="row" x-show="$store.global.activeQuestion===0">
+                <template x-for="(question) in $store.global.allQuestions" :key="question.id">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body" @click="$store.global.activeQuestion=question.id" x-text="question.id"></div>
+                        </div> 
+                    </div>
+                </template>
+            </div>
+
+            <!--Show active question-->
+            <template x-if="$store.global.activeQuestion!==0">
+                <div>
+                    <p x-text="$store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion).text"></p>
+                    <div class="row">
+                        <template x-for="answer in $store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion).answers" >
+                            <div class="col">
+                                <button class="btn btn-light btn-lg" @click="$store.global.activeLocation=answer.locationId" x-text="answer.text">
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="row">
+                        <p>Ga naar de volgende locatie en activeer daar de AR</p>
+                        <a class="btn btn-info" x-show="$store.global.activeLocation!==0" x-bind:href="$store.global.getLocationUrl($store.global.activeLocation)">Klik hier om naar de locatie te navigeren</a>
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-warning" @click="$store.global.activeQuestion=0">Terug naar vragen overzicht</button>
+                    </div>
+                </div>
+            </template>
+        </div> 
     </div>
 
     <template id="entity-box">
