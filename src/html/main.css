@@ -26,6 +26,8 @@
     width: 100%;
     aspect-ratio: 1;
     border: 0;
+    filter: invert(100%) contrast(83%) sepia(40%) saturate(300%) hue-rotate(145deg);
+    /* filter: invert(100%) contrast(83%) hue-rotate(170deg); */
 }
 
 button.outline:hover {
