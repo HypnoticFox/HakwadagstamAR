@@ -1,0 +1,262 @@
+.ar-toggle-off {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.ar-toggle-on {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+#gmap {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 0;
+}
+
+button.outline:hover {
+    color: var(--primary-color-350);
+    background-color: var(--primary-color-650);
+    border-color: var(--primary-color-350);
+}
+
+.btn-primary-selected {
+    color: var(--primary-color-350);
+    background-color: var(--primary-color-800);
+    border-color: var(--primary-color-350);
+}
+
+/* #region Theme */
+:root {
+    background: #1e1e1e url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAG0lEQVQYV2P8//+/FCMj4zMGJMCIzIGxKRQEAJgPBAbJqUVTAAAAAElFTkSuQmCC) repeat;
+    --pico-font-family: 'Michroma', sans-serif;
+
+    --primary-color-50: #C3FCFA;
+    --primary-color-100: #58FAF9;
+    --primary-color-150: #3DECEB;
+    --primary-color-200: #25DDDD;
+    --primary-color-250: #0CCECE;
+    --primary-color-300: #0AC2C2;
+    --primary-color-350: #0AB1B1;
+    --primary-color-400: #05A2A2;
+    --primary-color-450: #059494;
+    --primary-color-500: #058686;
+    --primary-color-550: #047878;
+    --primary-color-600: #046A6A;
+    --primary-color-650: #025D5D;
+    --primary-color-700: #015050;
+    --primary-color-750: #014343;
+    --primary-color-800: #043737;
+    --primary-color-850: #052B2B;
+    --primary-color-900: #051F1F;
+    --primary-color-950: #041413;
+}
+/* #endregion */
+
+/* #region utility classes */
+.ma-0,
+.my-0,
+.mt-0 {
+    margin-top: 0;
+}
+
+.ma-1,
+.my-1,
+.mt-1 {
+    margin-top: var(--pico-spacing);
+}
+
+.ma-2,
+.my-2,
+.mt-2 {
+    margin-top: calc(2 * var(--pico-spacing));
+}
+
+.ma-3,
+.my-3,
+.mt-3 {
+    margin-top: calc(3 * var(--pico-spacing));
+}
+
+.ma-0,
+.my-0,
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.ma-1,
+.my-1,
+.mb-1 {
+    margin-bottom: var(--pico-spacing);
+}
+
+.ma-2,
+.my-2,
+.mb-2 {
+    margin-bottom: calc(2 * var(--pico-spacing));
+}
+
+.ma-3,
+.my-3,
+.mb-3 {
+    margin-bottom: calc(3 * var(--pico-spacing));
+}
+
+.ma-0,
+.mx-0,
+.ml-0 {
+    margin-left: 0;
+}
+
+.ma-1,
+.mx-1,
+.ml-1 {
+    margin-left: var(--pico-spacing);
+}
+
+.ma-2,
+.mx-2,
+.ml-2 {
+    margin-left: calc(2 * var(--pico-spacing));
+}
+
+.ma-3,
+.mx-3,
+.ml-3 {
+    margin-left: calc(3 * var(--pico-spacing));
+}
+
+.ma-0,
+.mx-0,
+.mr-0 {
+    margin-right: 0;
+}
+
+.ma-1,
+.mx-1,
+.mr-1 {
+    margin-right: var(--pico-spacing);
+}
+
+.ma-2,
+.mx-2,
+.mr-2 {
+    margin-right: calc(2 * var(--pico-spacing));
+}
+
+.ma-3,
+.mx-3,
+.mr-3 {
+    margin-bottom: calc(3 * var(--pico-spacing));
+}
+
+    .pa-0,
+.py-0,
+.pt-0 {
+    padding-top: 0;
+}
+
+.pa-1,
+.py-1,
+.pt-1 {
+    padding-top: var(--pico-spacing);
+}
+
+.pa-2,
+.py-2,
+.pt-2 {
+    padding-top: calc(2 * var(--pico-spacing));
+}
+
+.pa-3,
+.py-3,
+.pt-3 {
+    padding-top: calc(3 * var(--pico-spacing));
+}
+
+.pa-0,
+.py-0,
+.pb-0 {
+    padding-bottom: 0;
+}
+
+.pa-1,
+.py-1,
+.pb-1 {
+    padding-bottom: var(--pico-spacing);
+}
+
+.pa-2,
+.py-2,
+.pb-2 {
+    padding-bottom: calc(2 * var(--pico-spacing));
+}
+
+.pa-3,
+.py-3,
+.pb-3 {
+    padding-bottom: calc(3 * var(--pico-spacing));
+}
+
+.pa-0,
+.px-0,
+.pl-0 {
+    padding-left: 0;
+}
+
+.pa-1,
+.px-1,
+.pl-1 {
+    padding-left: var(--pico-spacing);
+}
+
+.pa-2,
+.px-2,
+.pl-2 {
+    padding-left: calc(2 * var(--pico-spacing));
+}
+
+.pa-3,
+.px-3,
+.pl-3 {
+    padding-left: calc(3 * var(--pico-spacing));
+}
+
+.pa-0,
+.px-0,
+.pr-0 {
+    padding-right: 0;
+}
+
+.pa-1,
+.px-1,
+.pr-1 {
+    padding-right: var(--pico-spacing);
+}
+
+.pa-2,
+.px-2,
+.pr-2 {
+    padding-right: calc(2 * var(--pico-spacing));
+}
+
+.pa-3,
+.px-3,
+.pr-3 {
+    padding-bottom: calc(3 * var(--pico-spacing));
+}
+/* #endregion */
