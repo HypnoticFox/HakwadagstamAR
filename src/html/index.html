@@ -44,7 +44,7 @@
                 <div class="grid">
                     <template x-for="(question) in $store.global.allQuestions" :key="question.id">
                         <button 
-                            @click="$store.global.activeQuestion=question.id" 
+                            @click="$store.global.openQuestion(question.id)" 
                             x-text="question.id"
                             class="outline"
                         ></button>

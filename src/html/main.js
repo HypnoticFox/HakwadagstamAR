@@ -26,6 +26,11 @@ document.addEventListener('alpine:init', () => {
             return "https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=" + loc.latitude + "," + loc.longitude;
         },
 
+        openQuestion(id){
+            this.activeQuestion=id;
+            Alpine.store('global').setActiveLocationSet(id);
+        },
+
         allLocations: [
             {
                 id: 1,
@@ -44,8 +49,29 @@ document.addEventListener('alpine:init', () => {
             {
                 id: 3,
                 locationSet: 1,
+                latitude: 52.3499667,
+                longitude: 6.5891422,
+                html: ""
+            },
+            {
+                id: 4,
+                locationSet: 2,
+                latitude: 52.50770893871821,
+                longitude: 6.097938843248748,
+                html: "<a-entity greenbox material='color: green' geometry='primitive: box' gps-new-entity-place='latitude: 52.50770893871821; longitude: 6.097938843248748' scale='10 10 10'></a-entity>"
+            },
+            {
+                id: 5,
+                locationSet: 2,
                 latitude: 52.3733762,
                 longitude: 6.4591569,
+                html: ""
+            },
+            {
+                id: 6,
+                locationSet: 2,
+                latitude: 52.3499667,
+                longitude: 6.5891422,
                 html: ""
             }
         ],
@@ -72,6 +98,7 @@ document.addEventListener('alpine:init', () => {
         ]
     });
 
+    //Alpine.store('global').setActiveLocationSet(1);
     Alpine.store('global').setActiveLocationSet(1);
 })
 
