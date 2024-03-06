@@ -97,6 +97,7 @@
         @click="$store.global.toggleArMode()"
         :class="$store.global.arModeActive ? 'ar-toggle-on' : 'ar-toggle-off'"
         x-text="$store.global.arModeActive ? 'Exit AR' : 'Enter AR'"
+        x-show="$store.global.arModeButtonActive"
     >Toggle AR</button>
      
     <template x-if="$store.global.arModeActive">

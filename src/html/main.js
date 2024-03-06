@@ -6,6 +6,7 @@ document.addEventListener('alpine:init', () => {
         visitedLocations: Alpine.$persist([]).as('hakwadagstamAR-visitedLocations'),
         activeQuestion: 0,
         activeLocation: 0,
+        arModeButtonActive: false,
 
         toggleArMode() {
             this.arModeActive = ! this.arModeActive
@@ -24,6 +25,59 @@ document.addEventListener('alpine:init', () => {
             if (!loc) { return null; }
 
             return "https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=" + loc.latitude + "," + loc.longitude;
+        },
+
+        isInRange(lat, long){
+            inRange=false;
+            this.activeLocations.forEach((activeLoc)=>{
+                distance = this.cosineDistanceBetweenPoints(lat, long, activeLoc.latitude, activeLoc.longitude);
+                console.log("distance to location id "+ activeLoc.id + ": " + distance + " meters."); //for debugging
+                distance < 300 ? inRange = true : '';
+            });
+            return inRange;
+        },
+
+        cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
+            const R = 6371e3;
+            const p1 = lat1 * Math.PI/180;
+            const p2 = lat2 * Math.PI/180;
+            const deltaP = p2 - p1;
+            const deltaLon = lon2 - lon1;
+            const deltaLambda = (deltaLon * Math.PI) / 180;
+            const a = Math.sin(deltaP/2) * Math.sin(deltaP/2) +
+                      Math.cos(p1) * Math.cos(p2) *
+                      Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
+            const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * R;
+            return Math.round(d);
+          },
+
+        //When user is in range of one of the active locations, the AR button is shown. 
+        //When the user is outside the range of any of the active locations, the AR button is hidden and if the AR mode was active, it will be deactivated.
+        updateCurrentLocation(loc){
+            if (Alpine.store('global').isInRange(loc.coords.latitude, loc.coords.longitude)){
+                Alpine.store('global').arModeButtonActive = true
+            } 
+            else { 
+                Alpine.store('global').arModeButtonActive = false;
+                Alpine.store('global').arModeActive = false;
+            }
+        },
+
+        showLocationError(error){
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                  alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
+                  break;
+                case error.POSITION_UNAVAILABLE:
+                  alert("We kunnen je huidige locatie niet bepalen, deze app zal daardoor niet goed werken.");
+                  break;
+                case error.TIMEOUT:
+                  alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
+                  break;
+                case error.UNKNOWN_ERROR:
+                  alert("Er is een onbekende fout opgetreden.");
+                  break;
+            }
         },
 
         openQuestion(id){
@@ -99,7 +153,13 @@ document.addEventListener('alpine:init', () => {
     });
 
     //Alpine.store('global').setActiveLocationSet(1);
-    Alpine.store('global').setActiveLocationSet(1);
+
+    if (navigator.geolocation){
+        navigator.geolocation.watchPosition(Alpine.store('global').updateCurrentLocation, Alpine.store('global').showLocationError);
+    }
+    else{
+        alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
+    }
 })
 
 function enterArMode() {
