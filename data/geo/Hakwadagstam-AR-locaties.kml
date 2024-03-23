@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Hakwadagstam AR</name>
+    <description/>
+    <Style id="icon-1502-FFD600-nodesc-normal">
+      <IconStyle>
+        <color>ff00d6ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1502-FFD600-nodesc-highlight">
+      <IconStyle>
+        <color>ff00d6ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1502-FFD600-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1502-FFD600-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1502-FFD600-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-0F9D58-nodesc-normal">
+      <IconStyle>
+        <color>ff589d0f</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0F9D58-nodesc-highlight">
+      <IconStyle>
+        <color>ff589d0f</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0F9D58-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0F9D58-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0F9D58-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1899-FF5252-nodesc-normal">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-FF5252-nodesc-highlight">
+      <IconStyle>
+        <color>ff5252ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-FF5252-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-FF5252-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-FF5252-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Vragen</name>
+      <Placemark>
+        <name>Vraag 1 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4549291,52.3646163,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 1 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4506238,52.3608785,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 1 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4621246,52.3618106,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 2 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4713527,52.3592526,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 2 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4746625,52.3548043,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 2 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4666144,52.3560021,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 3 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4574997,52.3566222,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 3 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4620227,52.3545462,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 3 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4611002,52.3598476,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 4 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4728974,52.3629401,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 4 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4760546,52.3615158,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 4 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4777336,52.3595365,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 5 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4860247,52.3562937,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 5 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4820024,52.3548325,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 5 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4887096,52.3547515,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 6 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4629117,52.3517786,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 6 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4577059,52.3555361,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 6 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4643524,52.3556029,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 7 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4771444,52.351455,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 7 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4680535,52.3545261,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 7 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4766239,52.3575263,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 8 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4599736,52.360255,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 8 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4637684,52.3627839,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 8 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4648856,52.3601543,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 9 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4535864,52.3631468,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 9 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4567102,52.3605927,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 9 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4547809,52.3579821,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 10 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4729217,52.3543093,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 10 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4688455,52.3534227,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 10 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4752997,52.351328,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 11 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4857771,52.3534049,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 11 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4837438,52.3554961,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 11 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4882328,52.3558975,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 12 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.462808,52.3626431,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 12 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4640778,52.3645808,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 12 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4679233,52.3633049,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 13 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4677359,52.3562328,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 13 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4690982,52.3583928,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 13 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4651879,52.3581364,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 14 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4782477,52.3608945,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 14 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4737324,52.362045,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 14 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4751648,52.3601889,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 15 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.461996,52.3543447,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 15 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4579134,52.3536574,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 15 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4647359,52.3520354,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 16 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4554383,52.3588811,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 16 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4524452,52.3608146,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 16 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.459349,52.3580182,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 17 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4830987,52.3540749,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 17 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4842744,52.3560696,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 17 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4879332,52.35455,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 18 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4660818,52.3595416,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 18 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4640673,52.3611162,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 18 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4674447,52.3620941,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 19 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4698744,52.3532977,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 19 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4736147,52.3554141,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 19 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4742387,52.3518337,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 20 Goed</name>
+        <styleUrl>#icon-1899-0F9D58-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4532124,52.3608174,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 20 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4562954,52.3641857,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Vraag 20 Fout</name>
+        <styleUrl>#icon-1899-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4589333,52.3611773,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Gouden munten</name>
+      <Placemark>
+        <name>Gouden Munt 1</name>
+        <styleUrl>#icon-1502-FFD600-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4605241,52.3573764,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Gouden Munt 2</name>
+        <styleUrl>#icon-1502-FFD600-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4748323,52.3615865,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Gouden Munt 3</name>
+        <styleUrl>#icon-1502-FFD600-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            6.4878111,52.3571469,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

@@ -30,16 +30,22 @@
     <script type='text/javascript' src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
 
     <!-- Our Js -->
+    <script src="locations.js"></script>
+    <script src="questions.js"></script>
     <script src="main.js"></script>
 
 </head>
 <body x-data>
-    <main>
+    <main x-show="!$store.global.arModeActive">
         <div class="container">
             <h1>Hakwadagstam AR app</h1>
 
+            <h3>
+                Points: <span x-text="$store.global.points"></span>
+            </h3>
+
             <!-- List with all questions -->
-            <div x-show="$store.global.activeQuestion===0">
+            <div x-show="!$store.global.activeQuestion">
                 <h3>Kies de vraag die je wil beantwoorden</h3>
                 <div class="grid">
                     <template x-for="(question) in $store.global.allQuestions" :key="question.id">
@@ -53,22 +59,22 @@
             </div>
 
             <!--Show active question-->
-            <div x-show="$store.global.activeQuestion!==0">
+            <div x-show="$store.global.activeQuestion">
                 <div>
                     <h5 x-text="$store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion)?.text ?? '' "></h5>
                     <div class="grid">
                         <template x-for="answer in $store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion)?.answers ?? '' " >
                             <button 
-                                @click="$store.global.activeLocation=answer.locationId" 
+                                @click="$store.global.selectedAnswerLocationId=answer.locationId" 
                                 x-text="answer.text" 
-                                :class="answer.locationId === $store.global.activeLocation ? 'btn-primary-selected' : 'outline'"
+                                :class="answer.locationId === $store.global.selectedAnswerLocationId ? 'btn-primary-selected' : 'outline'"
                             >
                             </button>
                         </template>
                     </div>
 
                     <div
-                        x-show="$store.global.activeLocation"
+                        x-show="$store.global.selectedAnswerLocationId"
                         class="mt-1"
                     >
                         <p class="mb-0">Ga naar de volgende locatie en activeer daar de AR</p>
@@ -77,13 +83,13 @@
                             loading="lazy"
                             allowfullscreen
                             referrerpolicy="no-referrer-when-downgrade"
-                            :src="$store.global.getLocationUrl($store.global.activeLocation)"
+                            :src="$store.global.getLocationUrl($store.global.selectedAnswerLocationId)"
                             >
                         </iframe>
                     </div>
                     
                     <div class="mt-2">
-                        <button class="secondary outline" @click="$store.global.activeQuestion=0">Terug naar vragen overzicht</button>
+                        <button class="secondary outline" @click="$store.global.closeQuestion()">Terug naar vragen overzicht</button>
                     </div>
                 </div>
             </div>
@@ -93,26 +99,17 @@
         <div style="height: 5em; width: 100%;"></div>
     </main>
 
-    <button id="AR-toggle" 
+    <button id="AR-toggle"
         @click="$store.global.toggleArMode()"
-        :class="$store.global.arModeActive ? 'ar-toggle-on' : 'ar-toggle-off'"
+        :class="$store.global.arModeActive ? 'ar-toggle-on arjs-loader' : 'ar-toggle-off arjs-loader'"
         x-text="$store.global.arModeActive ? 'Exit AR' : 'Enter AR'"
         x-show="$store.global.arModeButtonActive"
     >Toggle AR</button>
      
     <template x-if="$store.global.arModeActive">
-        <div x-init="$nextTick(() => { enterArMode(); })">
-            <script>
-                AFRAME.registerComponent('greenbox', {
-                    init: function() {
-                        this.el.addEventListener('click', e => {
-                            console.log(e);
-                            alert('Green box clicked!');
-                        });
-                    }
-                });
-            </script>
+        <div id="ar-main" x-init="$nextTick(() => { $store.global.initArMode(); })">
             <a-scene
+                embedded
                 vr-mode-ui='enabled: false'
                 arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false'
                 renderer='antialias: true; alpha: true;'
@@ -125,22 +122,13 @@
                     arjs-device-orientation-controls='smoothingFactor: 0.1'
                     >
                 </a-camera>
-                <!-- gps-new-camera='gpsMinDistance: 5; simulateLatitude: 52.50756129569016; simulateLongitude:6.09750736459537;' -->
-            
-                <!-- <template x-for="location in $store.global.activeLocations">
-                    <a-entity x-html="location.html"></a-entity>
-                </template> -->
 
-                <!-- Park voor mijn huis -->
-                <!-- <a-entity id='greenbox' material='color: green' geometry='primitive: box' gps-new-entity-place='latitude: 52.50770893871821; longitude: 6.097938843248748' scale='10 10 10'></a-entity> -->
+                <a-assets>
+                    <a-asset-item id="OrbitronExtraBoldFont" src="Orbitron_ExtraBold.typeface.json"></a-asset-item>
+                </a-assets>
             
             </a-scene>
         </div>
-    </template>
-
-    <template id="entity-box">
-        <a-entity 
-        geometry="primitive: box" material="color: red"></a-entity>
     </template>
 
 </body>

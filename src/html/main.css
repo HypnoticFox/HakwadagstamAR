@@ -22,12 +22,21 @@
     z-index: 10;
 }
 
+#ar-main {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+video {
+    display: none;
+}
+
 #gmap {
     width: 100%;
     aspect-ratio: 1;
     border: 0;
-    filter: invert(100%) contrast(83%) sepia(40%) saturate(300%) hue-rotate(145deg);
-    /* filter: invert(100%) contrast(83%) hue-rotate(170deg); */
+    filter: invert(100%) contrast(83%) sepia(40%) saturate(300%) hue-rotate(135deg);
 }
 
 button.outline:hover {

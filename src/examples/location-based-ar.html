@@ -26,6 +26,17 @@
                 });
             }
         });
+
+        AFRAME.registerComponent('correct-answer', {
+            init: function() {
+                this.el.addEventListener('click', e => {
+                    console.log(e);
+                    console.log(e.target.attributes);
+                    console.log(e.target.attributes['location-id'].value);
+                    alert('You have have found a victory point!');
+                });
+            }
+        });
     </script>
 </head>
 <body>
@@ -38,7 +49,7 @@
     raycaster='near: 0; far: 50000'
     >
     <a-camera id='camera' 
-        gps-new-camera='gpsMinDistance: 5; simulateLatitude: 52.50756129569016; simulateLongitude:6.09750736459537;' 
+        gps-new-camera='gpsMinDistance: 5;' 
         look-controls-enabled='false' 
         arjs-device-orientation-controls='smoothingFactor: 0.1'
         >
@@ -55,24 +66,27 @@
 
     <a-assets>
         <a-asset-item id="defaultFont" src="https://raw.githack.com/supermedium/superframe/master/components/text-geometry/lib/helvetiker_regular.typeface.json"></a-asset-item>
+        <a-asset-item id="MichromaFont" src="Michroma_Regular.typeface.json"></a-asset-item>
+        <a-asset-item id="OrbitronBoldFont" src="Orbitron_Bold.typeface.json"></a-asset-item>
+        <a-asset-item id="OrbitronExtraBoldFont" src="Orbitron_ExtraBold.typeface.json"></a-asset-item>
+
         <a-asset-item id="animated-fox" src="https://raw.githack.com/KhronosGroup/glTF-Sample-Models/main/2.0/Fox/glTF/Fox.gltf"></a-asset-item>
     </a-assets>
 
     <!-- Sassenpoort -->
     <!-- <a-entity material='color: red' text-geometry="Sassenpoort" gps-new-entity-place="latitude: 52.509642585697506; longitude: 6.095541370719484"></a-entity> -->
-    <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 52.509642585697506; longitude: 6.095541370719484" scale="10 10 10"></a-entity>
+    <!-- <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 52.509642585697506; longitude: 6.095541370719484" scale="10 10 10"></a-entity> -->
 
     <!-- Park voor mijn huis -->
-    <a-entity greenbox material='color: green' geometry='primitive: box' gps-new-entity-place="latitude: 52.50770893871821; longitude: 6.097938843248748" scale="10 10 10"></a-entity>
+    <a-entity correct-answer location-id="15" material='color: green' geometry='primitive: box' gps-new-entity-place="latitude: 52.50770893871821; longitude: 6.097938843248748" scale="10 10 10"></a-entity>
 
     <!-- Achtertuin -->
     <!-- <a-entity material='color: blue' geometry='primitive: box' gps-new-entity-place="latitude: 52.507577786814664; longitude: 6.0973969520936695" scale="10 10 10"></a-entity> -->
     <a-entity look-at="[camera]" gps-new-entity-place="latitude: 52.507577786814664; longitude: 6.0973969520936695">
         <a-entity 
-            text-geometry="value: Achtertuin; size: 3; font: #defaultFont; height: 0.5" 
-            material='color: blue'
+            text-geometry="value: Wrong Location; size: 5; font: #OrbitronExtraBoldFont; height: 1; bevelEnabled: true; bevelSize: 0.1; bevelThickness: 0.1" 
+            material='color: #c40000'
             rotation="0 -45 0"
-            position="0 0 -20"
         ></a-entity>
     </a-entity>
 

@@ -1,21 +1,64 @@
 document.addEventListener('alpine:init', () => {
     Alpine.store('global', {
-        arModeActive: false,
-        points: Alpine.$persist(0).as('hakwadagstamAR-points'),
-        activeLocations: [],
-        visitedLocations: Alpine.$persist([]).as('hakwadagstamAR-visitedLocations'),
-        activeQuestion: 0,
-        activeLocation: 0,
         arModeButtonActive: false,
+        arModeActive: false,
+        activeLocations: [],
+        activeQuestion: null,
+        selectedAnswerLocationId: null,
+        currentPosition: null,
+        lastPositionMeasurement: null,
+        nearbyLocationId: null,
+        points: Alpine.$persist(0).as('hakwadagstamAR-points'),
+        visitedLocations: Alpine.$persist([]).as('hakwadagstamAR-visitedLocations'),
+        allLocations: LOCATIONS,
+        allQuestions: QUESTIONS,
 
-        toggleArMode() {
-            this.arModeActive = ! this.arModeActive
+        //#region Questions
+        openQuestion(id){
+            this.activeQuestion=id;
+            Alpine.store('global').setActiveLocationSet(id);
         },
 
+        closeQuestion(){
+            this.activeQuestion=null;
+            this.selectedAnswerLocationId=null;
+            this.activeLocations=[];
+            this.arModeButtonActive=false;
+        },
+        //#endregion
+
+        //#region AR
+        toggleArMode() {
+            this.arModeActive = ! this.arModeActive
+
+            if (!this.arModeActive) {
+                // Everytime AR.js loads it adds a <video> element to the root of the <body> element
+                // We don't need it and it blocks input so we remove it
+                document.querySelectorAll('body > video').forEach(e => e.remove());
+            }
+        },
+
+        initArMode() {
+            // Everytime AR.js loads it adds a <video> element to the root of the <body> element
+            // We don't need it and it blocks input so we remove it
+            // document.querySelectorAll('body > video').forEach(e => e.remove());
+        
+            if(!this.nearbyLocationId){
+                alert("Je moet in de buurt zijn van een locatie voordat je in AR gaat");
+                return;
+            }
+
+            const locationToRender = this.activeLocations.find((x) => x.id === this.nearbyLocationId);
+            const newElement = document.createElement('div');
+            newElement.innerHTML = locationToRender.html;
+            document.querySelector('a-scene').appendChild(newElement.firstElementChild);
+        },
+        //#endregion
+
+        //#region GPS
         setActiveLocationSet(id) {
             this.activeLocations = this.allLocations.filter((location) => 
-                location.locationSet === id 
-                && !this.visitedLocations.includes(location.id)
+                location.locationSet === id
             );
         },
 
@@ -27,150 +70,138 @@ document.addEventListener('alpine:init', () => {
             return "https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=" + loc.latitude + "," + loc.longitude;
         },
 
-        isInRange(lat, long){
-            inRange=false;
-            this.activeLocations.forEach((activeLoc)=>{
-                distance = this.cosineDistanceBetweenPoints(lat, long, activeLoc.latitude, activeLoc.longitude);
-                console.log("distance to location id "+ activeLoc.id + ": " + distance + " meters."); //for debugging
-                distance < 300 ? inRange = true : '';
-            });
-            return inRange;
-        },
+        newPositionMeasurement(loc) {
+            if(!this.lastPositionMeasurement){
+                this.lastPositionMeasurement = loc;
+                this.updateCurrentLocation(loc);
+                return;
+            }
 
-        cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
-            const R = 6371e3;
-            const p1 = lat1 * Math.PI/180;
-            const p2 = lat2 * Math.PI/180;
-            const deltaP = p2 - p1;
-            const deltaLon = lon2 - lon1;
-            const deltaLambda = (deltaLon * Math.PI) / 180;
-            const a = Math.sin(deltaP/2) * Math.sin(deltaP/2) +
-                      Math.cos(p1) * Math.cos(p2) *
-                      Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
-            const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * R;
-            return Math.round(d);
-          },
+            const distanceToPreviousPoint = haversineDistanceBetweenPoints(loc.coords.latitude, loc.coords.longitude, this.lastPositionMeasurement.coords.latitude, this.lastPositionMeasurement.coords.longitude);
+
+            if(distanceToPreviousPoint < 25){
+                this.lastPositionMeasurement = loc;
+                this.updateCurrentLocation(loc);
+                return;
+            }
+
+            this.lastPositionMeasurement = loc;
+        },
 
         //When user is in range of one of the active locations, the AR button is shown. 
         //When the user is outside the range of any of the active locations, the AR button is hidden and if the AR mode was active, it will be deactivated.
         updateCurrentLocation(loc){
-            if (Alpine.store('global').isInRange(loc.coords.latitude, loc.coords.longitude)){
-                Alpine.store('global').arModeButtonActive = true
-            } 
-            else { 
-                Alpine.store('global').arModeButtonActive = false;
-                Alpine.store('global').arModeActive = false;
+            this.currentPosition = loc;
+
+            if(this.arModeActive) return;
+
+            for(let i = 0; i < this.activeLocations.length; i++){
+                const isNearby = this.isInRange(
+                    loc.coords, 
+                    { latitude: this.activeLocations[i].latitude, longitude: this.activeLocations[i].longitude }, 
+                    this.activeLocations[i].viewingDistance);
+
+                if(isNearby){
+                    this.nearbyLocationId = this.activeLocations[i].id;
+                    
+                    Alpine.store('global').arModeButtonActive = true
+                    return;
+                }
             }
+
+            Alpine.store('global').arModeButtonActive = false;
+                this.nearbyLocationId = null;
         },
 
-        showLocationError(error){
+        isInRange(coordsA, coordsB, maxDistance){
+            distance = haversineDistanceBetweenPoints(
+                coordsA.latitude, 
+                coordsA.longitude, 
+                coordsB.latitude, 
+                coordsB.longitude);
+
+            return distance < maxDistance;
+        },
+
+        showLocationError(error) {
             switch(error.code) {
                 case error.PERMISSION_DENIED:
-                  alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
-                  break;
+                    alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
+                    break;
                 case error.POSITION_UNAVAILABLE:
-                  alert("We kunnen je huidige locatie niet bepalen, deze app zal daardoor niet goed werken.");
-                  break;
+                    alert("We kunnen je huidige locatie niet bepalen, deze app zal daardoor niet goed werken.");
+                    break;
                 case error.TIMEOUT:
-                  alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
-                  break;
+                    console.log("GetCurrentPosition Timeout");
+                    //alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
+                    break;
                 case error.UNKNOWN_ERROR:
-                  alert("Er is een onbekende fout opgetreden.");
-                  break;
+                    alert("Er is een onbekende fout opgetreden.");
+                    break;
             }
         },
+        //#endregion
 
-        openQuestion(id){
-            this.activeQuestion=id;
-            Alpine.store('global').setActiveLocationSet(id);
-        },
-
-        allLocations: [
-            {
-                id: 1,
-                locationSet: 1,
-                latitude: 52.50770893871821,
-                longitude: 6.097938843248748,
-                html: "<a-entity greenbox material='color: green' geometry='primitive: box' gps-new-entity-place='latitude: 52.50770893871821; longitude: 6.097938843248748' scale='10 10 10'></a-entity>"
-            },
-            {
-                id: 2,
-                locationSet: 1,
-                latitude: 52.3733762,
-                longitude: 6.4591569,
-                html: ""
-            },
-            {
-                id: 3,
-                locationSet: 1,
-                latitude: 52.3499667,
-                longitude: 6.5891422,
-                html: ""
-            },
-            {
-                id: 4,
-                locationSet: 2,
-                latitude: 52.50770893871821,
-                longitude: 6.097938843248748,
-                html: "<a-entity greenbox material='color: green' geometry='primitive: box' gps-new-entity-place='latitude: 52.50770893871821; longitude: 6.097938843248748' scale='10 10 10'></a-entity>"
-            },
-            {
-                id: 5,
-                locationSet: 2,
-                latitude: 52.3733762,
-                longitude: 6.4591569,
-                html: ""
-            },
-            {
-                id: 6,
-                locationSet: 2,
-                latitude: 52.3499667,
-                longitude: 6.5891422,
-                html: ""
-            }
-        ],
-
-        allQuestions:[
-            {
-                id: 1,
-                text: "Wat is 1+1?",
-                answers: [
-                    {text: "1", correct: false, locationId: 1}, 
-                    {text: "2", correct: true, locationId: 2},
-                    {text: "3", correct: false, locationId: 3}
-                ]
-            },
-            {
-                id:2,
-                text: "Geef het goede antwoord",
-                answers: [
-                    {text: "Dit is goed", correct: true, locationId: 4}, 
-                    {text: "Deze is fout", correct: false, locationId: 5},
-                    {text: "Deze ook", correct: false, locationId: 6}
-                ]
-            }
-        ]
     });
+})
 
-    //Alpine.store('global').setActiveLocationSet(1);
-
+document.addEventListener('alpine:initialized', () => {
     if (navigator.geolocation){
-        navigator.geolocation.watchPosition(Alpine.store('global').updateCurrentLocation, Alpine.store('global').showLocationError);
+        const watchPositionOptions = {
+            enableHighAccuracy: true,
+            maximumAge: 2000,
+        }
+        navigator.geolocation.watchPosition(
+            (loc) => Alpine.store('global').newPositionMeasurement(loc), 
+            (error) => Alpine.store('global').showLocationError(error), 
+            watchPositionOptions);
     }
     else{
         alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
     }
+
+    AFRAME.registerComponent('correct-answer', {
+        init: function() {
+            this.el.addEventListener('click', e => {
+                const locationId = e.target.attributes['location-id'].value;
+
+                if(Alpine.store('global').visitedLocations.includes(locationId)){
+                    return;
+                }
+
+                Alpine.store('global').points++;
+
+                Alpine.store('global').visitedLocations.push(locationId);
+                console.log(Alpine.store('global').visitedLocations);
+
+                alert('You have have found a victory point!');
+            });
+        }
+    });
 })
 
-function enterArMode() {
-    // Everytime AR.js loads it adds a <video> element to the root of the <body> element
-    // We don't need it and it blocks input so we remove it
-    document.querySelectorAll('body > video').forEach(e => e.remove());
+function haversineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
+    const R = 6369087;
+    const p1 = lat1 * Math.PI/180;
+    const p2 = lat2 * Math.PI/180;
+    const deltaLon = lon2 - lon1;
+    const deltaLambda = (deltaLon * Math.PI) / 180;
+    const d = Math.acos(
+      Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(deltaLambda),
+    ) * R;
+    return d;
+  }
 
-    // TODO: Here we should decide which locations we want to show
-    Alpine.store('global').activeLocations.forEach( (location) => {
-        var newElement = document.createElement('div');
-        newElement.innerHTML = location.html;
-        document.querySelector('a-scene').appendChild(newElement.firstChild);
-    })
+function cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
+    const R = 6369087;
+    const p1 = lat1 * Math.PI/180;
+    const p2 = lat2 * Math.PI/180;
+    const deltaP = p2 - p1;
+    const deltaLon = lon2 - lon1;
+    const deltaLambda = (deltaLon * Math.PI) / 180;
+    const a = Math.sin(deltaP/2) * Math.sin(deltaP/2) +
+              Math.cos(p1) * Math.cos(p2) *
+              Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
+    const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * R;
+    return Math.round(d);
 }
