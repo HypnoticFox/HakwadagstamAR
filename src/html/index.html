@@ -61,7 +61,7 @@
             <!--Show active question-->
             <div x-show="$store.global.activeQuestion">
                 <div>
-                    <h5 x-text="$store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion)?.text ?? '' "></h5>
+                    <h5 x-html="$store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion)?.text ?? '' "></h5>
                     <div class="grid">
                         <template x-for="answer in $store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion)?.answers ?? '' " >
                             <button 
