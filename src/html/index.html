@@ -30,8 +30,8 @@
     <script type='text/javascript' src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
 
     <!-- Our Js -->
-    <script src="locations.js"></script>
-    <script src="questions.js"></script>
+    <script src="data/js/locations.js"></script>
+    <script src="data/js/questions.js"></script>
     <script src="main.js"></script>
 
 </head>
@@ -112,8 +112,8 @@
                 embedded
                 vr-mode-ui='enabled: false'
                 arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false'
-                renderer='antialias: true; alpha: true;'
-                cursor='rayOrigin: mouse; fuseTimeout: 0;'
+                renderer='antialias: true; alpha: true; logarithmicDepthBuffer: true;'
+                cursor='rayOrigin: mouse; fuse: false;'
                 raycaster='near: 0; far: 50000'
                 >
                 <a-camera id='camera'
@@ -123,9 +123,7 @@
                     >
                 </a-camera>
 
-                <a-assets>
-                    <a-asset-item id="OrbitronExtraBoldFont" src="Orbitron_ExtraBold.typeface.json"></a-asset-item>
-                </a-assets>
+                <a-entity light="type: directional; color: #EEE; intensity: 1.5;" position="-1 1 -1"></a-entity>
             
             </a-scene>
         </div>

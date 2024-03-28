@@ -2,6 +2,8 @@ document.addEventListener('alpine:init', () => {
     Alpine.store('global', {
         arModeButtonActive: false,
         arModeActive: false,
+        arModeInteractionActive: false,
+        hasDeviceOrientationSensors: false,
         activeLocations: [],
         activeQuestion: null,
         selectedAnswerLocationId: null,
@@ -32,26 +34,46 @@ document.addEventListener('alpine:init', () => {
             this.arModeActive = ! this.arModeActive
 
             if (!this.arModeActive) {
+                this.arModeInteractionActive = false;
+
                 // Everytime AR.js loads it adds a <video> element to the root of the <body> element
                 // We don't need it and it blocks input so we remove it
                 document.querySelectorAll('body > video').forEach(e => e.remove());
             }
         },
 
-        initArMode() {
-            // Everytime AR.js loads it adds a <video> element to the root of the <body> element
-            // We don't need it and it blocks input so we remove it
-            // document.querySelectorAll('body > video').forEach(e => e.remove());
-        
+        initArMode() {        
             if(!this.nearbyLocationId){
                 alert("Je moet in de buurt zijn van een locatie voordat je in AR gaat");
                 return;
             }
 
             const locationToRender = this.activeLocations.find((x) => x.id === this.nearbyLocationId);
-            const newElement = document.createElement('div');
-            newElement.innerHTML = locationToRender.html;
-            document.querySelector('a-scene').appendChild(newElement.firstElementChild);
+            let htmlToRender = locationToRender.html;
+
+            const sceneEl = document.querySelector('a-scene');
+
+            let newElement = null;
+
+            if(this.hasDeviceOrientationSensors) {
+                const newDiv = document.createElement('div');
+                newDiv.innerHTML = htmlToRender;
+                newElement = newDiv.firstElementChild;
+                sceneEl.appendChild(newElement);
+            }
+            else {
+                const re = /gps-new-entity-place='.*?'/i;
+                const newDiv = document.createElement('div');
+                newDiv.innerHTML = htmlToRender.replace(re, "position='0 0 -30'");
+                newElement = newDiv.firstElementChild;
+                document.querySelector('a-camera').appendChild(newElement);
+            }
+
+            setTimeout(() => {
+                if(Alpine.store('global').arModeActive) {
+                    Alpine.store('global').arModeInteractionActive = true;
+                }
+            }, 1000);
         },
         //#endregion
 
@@ -146,6 +168,30 @@ document.addEventListener('alpine:init', () => {
 })
 
 document.addEventListener('alpine:initialized', () => {
+    if (isIOS()) {
+        console.log("Is IOS Device");
+        DeviceOrientationEvent.requestPermission()
+            .then((response) => {
+                if (response === "granted") {
+                    window.addEventListener("deviceorientation", (e) => {
+                        if(e.webkitCompassHeading !== null && e.alpha !== null && e.beta !== null && e.gamma !== null){
+                            Alpine.store('global').hasDeviceOrientationSensors = true;
+                        }
+                    }, { once: true, capture: true });
+                } else {
+                    alert("Toestemming voor orientatie sensoren is vereist!");
+                }
+            })
+            .catch(() => console.log("No device orietation sensors found!"));
+    // Android devices
+    } else {
+        window.addEventListener("deviceorientationabsolute", (e) => {
+            if(e.absolute === true && e.alpha !== null && e.beta !== null && e.gamma !== null){
+                Alpine.store('global').hasDeviceOrientationSensors = true;
+            }
+        }, { once: true, capture: true });
+    }
+
     if (navigator.geolocation){
         const watchPositionOptions = {
             enableHighAccuracy: true,
@@ -159,26 +205,130 @@ document.addEventListener('alpine:initialized', () => {
     else{
         alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
     }
-
-    AFRAME.registerComponent('correct-answer', {
-        init: function() {
-            this.el.addEventListener('click', e => {
-                const locationId = e.target.attributes['location-id'].value;
-
-                if(Alpine.store('global').visitedLocations.includes(locationId)){
-                    return;
-                }
-
-                Alpine.store('global').points++;
-
-                Alpine.store('global').visitedLocations.push(locationId);
-                console.log(Alpine.store('global').visitedLocations);
-
-                alert('You have have found a victory point!');
-            });
-        }
-    });
 })
+
+document.addEventListener('touchstart', (e) => {
+    previousTouches = e.touches;
+});
+document.addEventListener('touchmove', handleTouchMovement);
+document.addEventListener('touchend', (e) => {
+    handleTouchMovement(e);
+    previousTouches = [];
+});
+
+// To center the pivot of text models
+document.addEventListener('object3dset', function (e) {
+    if (e.detail.type === 'mesh'
+        && e.target.hasAttribute('text-geometry')
+    ){ 
+        setTimeout(centerModelPivot(e.target), 10);
+    }
+});
+
+AFRAME.registerComponent('correct-answer', {
+    init: function() {
+        this.el.addEventListener('click', e => {
+            const locationId = this.el.getAttribute('location-id');
+
+            if(!locationId
+                || Alpine.store('global').visitedLocations.includes(locationId)
+            ){
+                return;
+            }
+
+            Alpine.store('global').points++;
+
+            Alpine.store('global').visitedLocations.push(locationId);
+            console.log(Alpine.store('global').visitedLocations);
+
+            alert('You have have found a victory point!');
+        });
+    }
+});
+
+var previousTouches = [];
+
+function handleTouchMovement(e) {
+    if(!Alpine.store('global').arModeInteractionActive
+        || !getCurrentEntity()
+        ) {
+            previousTouches = e.touches;
+            return;
+    }
+
+    if(previousTouches.length !== e.touches.length) {
+        previousTouches = e.touches;
+        return;
+    }
+
+    if(e.touches.length === 1) {
+        const distanceX = e.touches[0].clientX - previousTouches[0].clientX;
+        const distanceY = e.touches[0].clientY - previousTouches[0].clientY;
+
+        handleRotation(distanceX, -distanceY);
+    }
+    if(e.touches.length === 2) {
+        oldDist = Math.hypot(
+            previousTouches[0].pageX - previousTouches[1].pageX,
+            previousTouches[0].pageY - previousTouches[1].pageY
+        );
+
+        newDist = Math.hypot(
+            e.touches[0].pageX - e.touches[1].pageX,
+            e.touches[0].pageY - e.touches[1].pageY
+        );
+        
+        handleScale(newDist - oldDist);
+    }
+
+    previousTouches = e.touches;
+}
+
+function handleRotation(distanceX, distanceY) {
+    const el = getCurrentEntity();
+
+    const rotationFactor = 0.01;
+
+    let rotationAxis = new THREE.Vector3(distanceX, distanceY, 0);
+    const distance = rotationAxis.length();
+    rotationAxis.applyAxisAngle(new THREE.Vector3(0, 0, 1), THREE.MathUtils.degToRad(90));
+    rotationAxis.normalize();
+    
+    el.object3D.rotateOnWorldAxis(rotationAxis, distance * rotationFactor);
+}
+
+function handleScale(changeInDistance) {
+    const el = getCurrentEntity();
+
+    const scaleFactor = 0.01;
+    const minScale = 0.1;
+    const maxScale = 10;
+    
+    let newScale = el.object3D.scale.x + changeInDistance * scaleFactor;
+    newScale = Math.min(Math.max(newScale, minScale), maxScale);
+
+    el.object3D.scale.x = newScale;
+    el.object3D.scale.y = newScale;
+    el.object3D.scale.z = newScale;
+}
+
+function getCurrentEntity() {
+    return document.querySelector("a-entity[geometry], a-entity[text-geometry], a-entity[gltf-model], a-entity[obj-model]");
+}
+
+function centerModelPivot(el) {
+    const mesh = el.getObject3D('mesh');
+    const bbox = new THREE.Box3().setFromObject(el.object3D);
+    const offsetX = (bbox.min.x - bbox.max.x) / 2;
+    const offsetY = (bbox.min.y - bbox.max.y) / 2;
+
+    if(!Number.isFinite(offsetX) || !Number.isFinite(offsetY)) {
+        setTimeout(centerModelPivot, 10, el);
+        return; 
+    }
+    
+    mesh.position.set(offsetX, offsetY, 0);
+}
 
 function haversineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
     const R = 6369087;
@@ -192,16 +342,13 @@ function haversineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
     return d;
   }
 
-function cosineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
-    const R = 6369087;
-    const p1 = lat1 * Math.PI/180;
-    const p2 = lat2 * Math.PI/180;
-    const deltaP = p2 - p1;
-    const deltaLon = lon2 - lon1;
-    const deltaLambda = (deltaLon * Math.PI) / 180;
-    const a = Math.sin(deltaP/2) * Math.sin(deltaP/2) +
-              Math.cos(p1) * Math.cos(p2) *
-              Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
-    const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)) * R;
-    return Math.round(d);
-}
+  function isIOS() {
+    return [
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod'
+    ].includes(navigator.platform)
+  }

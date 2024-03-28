@@ -9,6 +9,8 @@
     <script type='text/javascript' src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
     <script type='text/javascript' src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
     <script>
+        var previousTouches = [];
+
         AFRAME.registerComponent('graybox', {
             init: function() {
                 this.el.addEventListener('click', e => {
@@ -30,22 +32,123 @@
         AFRAME.registerComponent('correct-answer', {
             init: function() {
                 this.el.addEventListener('click', e => {
-                    console.log(e);
-                    console.log(e.target.attributes);
-                    console.log(e.target.attributes['location-id'].value);
-                    alert('You have have found a victory point!');
+                    console.log("Clicked Location: " + this.el.getAttribute('location-id'));
+                    // alert('You have have found a victory point!');
                 });
             }
         });
+
+        AFRAME.registerComponent('debug-click', {
+            init: function() {
+                this.el.addEventListener('click', e => {
+                    console.dir(this.el);
+                });
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            previousTouches = e.touches;
+        });
+        document.addEventListener('touchmove', handleTouchMovement);
+        document.addEventListener('touchend', (e) => {
+            handleTouchMovement(e);
+            previousTouches = [];
+        });
+
+        // To center the pivot of text models
+        document.addEventListener('object3dset', function (e) {
+            if (e.detail.type === 'mesh'
+                && e.target.hasAttribute('text-geometry')
+            ){ 
+                setTimeout(centerModelPivot(e.target), 10);
+            }
+        });
+
+        function handleTouchMovement(e) {
+            if(!getCurrentEntity()) return;
+
+            if(previousTouches.length !== e.touches.length) {
+                previousTouches = e.touches;
+                return;
+            }
+
+            if(e.touches.length === 1) {
+                const distanceX = e.touches[0].clientX - previousTouches[0].clientX;
+                const distanceY = e.touches[0].clientY - previousTouches[0].clientY;
+
+                handleRotation(distanceX, -distanceY);
+            }
+            if(e.touches.length === 2) {
+                oldDist = Math.hypot(
+                    previousTouches[0].pageX - previousTouches[1].pageX,
+                    previousTouches[0].pageY - previousTouches[1].pageY
+                );
+
+                newDist = Math.hypot(
+                    e.touches[0].pageX - e.touches[1].pageX,
+                    e.touches[0].pageY - e.touches[1].pageY
+                );
+                
+                handleScale(newDist - oldDist);
+            }
+
+            previousTouches = e.touches;
+        }
+
+        function handleRotation(distanceX, distanceY) {
+            const el = getCurrentEntity();
+
+            const rotationFactor = 0.01;
+
+            let rotationAxis = new THREE.Vector3(distanceX, distanceY, 0);
+            const distance = rotationAxis.length();
+            rotationAxis.applyAxisAngle(new THREE.Vector3(0, 0, 1), THREE.MathUtils.degToRad(90));
+            rotationAxis.normalize();
+            
+            el.object3D.rotateOnWorldAxis(rotationAxis, distance * rotationFactor);
+        }
+
+        function handleScale(changeInDistance) {
+            const el = getCurrentEntity();
+
+            const scaleFactor = 0.01;
+            const minScale = 0.1;
+            const maxScale = 10;
+            
+            let newScale = el.object3D.scale.x + changeInDistance * scaleFactor;
+            newScale = Math.min(Math.max(newScale, minScale), maxScale);
+
+            el.object3D.scale.x = newScale;
+            el.object3D.scale.y = newScale;
+            el.object3D.scale.z = newScale;
+        }
+
+        function getCurrentEntity() {
+            return document.querySelector("a-entity[geometry], a-entity[text-geometry], a-entity[gltf-model], a-entity[obj-model], a-entity[fbx-model]");
+        }
+
+        function centerModelPivot(el) {
+            const mesh = el.getObject3D('mesh');
+            const bbox = new THREE.Box3().setFromObject(el.object3D);
+            const offsetX = (bbox.min.x - bbox.max.x) / 2;
+            const offsetY = (bbox.min.y - bbox.max.y) / 2;
+
+            if(!Number.isFinite(offsetX) || !Number.isFinite(offsetY)) {
+                setTimeout(centerModelPivot, 10, el);
+                return; 
+            }
+            
+            mesh.position.set(offsetX, offsetY, 0);
+        }
     </script>
 </head>
 <body>
 
-<a-scene 
+<a-scene
     vr-mode-ui='enabled: false' 
     arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' 
-    renderer='antialias: true; alpha: true;'
-    cursor='rayOrigin: mouse; fuseTimeout: 0;'
+    renderer='antialias: true; alpha: true; logarithmicDepthBuffer: true;'
+    cursor='rayOrigin: mouse; fuse: false;'
     raycaster='near: 0; far: 50000'
     >
     <a-camera id='camera' 
@@ -54,53 +157,130 @@
         arjs-device-orientation-controls='smoothingFactor: 0.1'
         >
 
-        <!-- <a-entity cursor="fuse: true; fuseTimeout: 1500"
-            position="0 0 -1"
-            geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
-            material="color: black; shader: flat"
-            >
+        <!-- Entity as child of camera if the the device has no motion controls -->
+        <!-- <a-entity position='0 0 -30'>
+                <a-entity
+                    text-geometry='
+                        value: Wrong Location; 
+                        size: 2; 
+                        font: data/fonts/Orbitron_ExtraBold.typeface.json;
+                        height: 1; 
+                        bevelEnabled: true; 
+                        bevelSize: 0.1; 
+                        bevelThickness: 0.1
+                    '
+                    material='color: #c40000'
+                ></a-entity>
+                <a-entity light='type: ambient; color: #EEE; intensity: 0.7;'></a-entity>
+        </a-entity> -->
+
+        <a-entity correct-answer 
+            location-id='100' 
+            look-at='[camera]'
+        >
+            <a-entity debug-click
+                position='0 0 -3000'
+                rotation='21.139635935982472148 -23.895622466628093861 -2.7799776773372570915'
+                obj-model='obj: url(data/models/spaceship_01/SciFi_Fighter_AK5.obj); mtl: url(data/models/spaceship_01/SciFi_Fighter_AK5.mtl)'
+            ></a-entity>
+            <a-entity light='type: ambient; color: #EEE; intensity: 1;'></a-entity>
+        </a-entity>
+
+        <!-- <a-entity correct-answer 
+            location-id='100' 
+            look-at='[camera]'
+        >
+            <a-entity debug-click
+                position='0 0 -50'
+                rotation='21.139635935982472148 -23.895622466628093861 -2.7799776773372570915'
+                obj-model='obj: url(data/models/spaceship_02/StarShip2.obj); mtl: url(data/models/spaceship_02/StarShip2.mtl)'
+            ></a-entity>
+            <a-entity light='type: ambient; color: #EEE; intensity: 1;'></a-entity>
+        </a-entity> -->
+
+        <!-- <a-entity correct-answer 
+            location-id='100' 
+            look-at='[camera]'
+        >
+            <a-entity debug-click
+                position='0 0 -3000'
+                rotation='21.139635935982472148 -23.895622466628093861 -2.7799776773372570915'
+                obj-model='obj: url(data/models/spaceship_03/MK6_OBJ.obj); mtl: url(data/models/spaceship_03/MK6_OBJ.mtl)'
+            ></a-entity>
+            <a-entity light='type: ambient; color: #EEE; intensity: 1;'></a-entity>
         </a-entity> -->
 
     </a-camera>
     <!-- simulateLatitude: 52.50756129569016; simulateLongitude:6.09750736459537; -->
 
-    <a-assets>
+    <a-entity light="type: directional; color: #EEE; intensity: 1.5;" position="-1 1 -1"></a-entity>
+
+    <!-- <a-assets>
         <a-asset-item id="defaultFont" src="https://raw.githack.com/supermedium/superframe/master/components/text-geometry/lib/helvetiker_regular.typeface.json"></a-asset-item>
-        <a-asset-item id="MichromaFont" src="Michroma_Regular.typeface.json"></a-asset-item>
-        <a-asset-item id="OrbitronBoldFont" src="Orbitron_Bold.typeface.json"></a-asset-item>
-        <a-asset-item id="OrbitronExtraBoldFont" src="Orbitron_ExtraBold.typeface.json"></a-asset-item>
 
         <a-asset-item id="animated-fox" src="https://raw.githack.com/KhronosGroup/glTF-Sample-Models/main/2.0/Fox/glTF/Fox.gltf"></a-asset-item>
-    </a-assets>
+    </a-assets> -->
+
+    <!-- <a-entity correct-answer 
+        location-id='100' 
+        look-at='[camera]' 
+        gps-new-entity-place='latitude: 52.507577786814664; longitude: 6.0973969520936695'
+    >
+        <a-entity debug-click
+            position='0 0 -2000'
+            rotation='21.139635935982472148 -23.895622466628093861 -2.7799776773372570915'
+            obj-model='obj: url(data/models/spaceship_01/SciFi_Fighter_AK5.obj); mtl: url(data/models/SciFi_Fighter_AK5.mtl)'
+        ></a-entity>
+        <a-entity light='type: ambient; color: #EEE; intensity: 1;'></a-entity>
+    </a-entity> -->
+
+    <!-- <a-entity gps-new-entity-place='latitude: 52.507577786814664; longitude: 6.0973969520936695'>
+        <a-entity
+            text-geometry="
+                value: Wrong Location; 
+                size: 3; 
+                font: data/fonts/Orbitron_ExtraBold.typeface.json;
+                height: 1; 
+                bevelEnabled: true; 
+                bevelSize: 0.1; 
+                bevelThickness: 0.1
+            "
+            material='color: #c40000'
+        ></a-entity>
+        <a-entity light='type: ambient; color: #EEE; intensity: 0.7;'></a-entity>
+    </a-entity> -->
 
     <!-- Sassenpoort -->
     <!-- <a-entity material='color: red' text-geometry="Sassenpoort" gps-new-entity-place="latitude: 52.509642585697506; longitude: 6.095541370719484"></a-entity> -->
     <!-- <a-entity material='color: red' geometry='primitive: box' gps-new-entity-place="latitude: 52.509642585697506; longitude: 6.095541370719484" scale="10 10 10"></a-entity> -->
 
     <!-- Park voor mijn huis -->
-    <a-entity correct-answer location-id="15" material='color: green' geometry='primitive: box' gps-new-entity-place="latitude: 52.50770893871821; longitude: 6.097938843248748" scale="10 10 10"></a-entity>
+    <!-- <a-entity correct-answer look-at="[camera]" location-id="15" gps-new-entity-place="latitude: 52.50770893871821; longitude: 6.097938843248748">
+        <a-entity
+        material='color: green' geometry='primitive: box' scale="10 10 10"></a-entity>
+        </a-entity>
+    </a-entity> -->
 
     <!-- Achtertuin -->
     <!-- <a-entity material='color: blue' geometry='primitive: box' gps-new-entity-place="latitude: 52.507577786814664; longitude: 6.0973969520936695" scale="10 10 10"></a-entity> -->
-    <a-entity look-at="[camera]" gps-new-entity-place="latitude: 52.507577786814664; longitude: 6.0973969520936695">
+    <!-- <a-entity look-at="[camera]" gps-new-entity-place="latitude: 52.507577786814664; longitude: 6.0973969520936695">
         <a-entity 
             text-geometry="value: Wrong Location; size: 5; font: #OrbitronExtraBoldFont; height: 1; bevelEnabled: true; bevelSize: 0.1; bevelThickness: 0.1" 
             material='color: #c40000'
-            rotation="0 -45 0"
         ></a-entity>
-    </a-entity>
+    </a-entity> -->
 
     <!-- Direct voor mijn huis -->
-    <a-entity graybox
+    <!-- <a-entity graybox
         geometry="primitive: box"
         material="color: gray; shader: flat"
         gps-new-entity-place="latitude: 52.50749318823318; longitude: 6.097933153405297"
         scale="10 10 10"
         >
-    </a-entity>
+    </a-entity> -->
     <!-- <a-entity material='color: gray' geometry='primitive: box' gps-new-entity-place="latitude: 52.50749318823318; longitude: 6.097933153405297" scale="10 10 10"></a-entity> -->
 
-    <a-entity look-at="[camera]" gps-new-entity-place="latitude: 52.50747289609733; longitude: 6.097415979163343">
+    <!-- <a-entity look-at="[camera]" gps-new-entity-place="latitude: 52.50747289609733; longitude: 6.097415979163343">
         <a-entity position="0 -50 -200">
             <a-entity
                 gltf-model="#animated-fox"
@@ -109,7 +289,7 @@
                 >
             </a-entity>
         </a-entity>
-    </a-entity>
+    </a-entity> -->
     
 </a-scene>
 </body>
