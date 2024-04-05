@@ -1,37 +1,51 @@
 document.addEventListener('alpine:init', () => {
     Alpine.store('global', {
+        seenIntro: Alpine.$persist(false).as('hakwadagstamAR-seenIntro'),
+
         arModeButtonActive: false,
         arModeActive: false,
         arModeInteractionActive: false,
         hasDeviceOrientationSensors: false,
+
         activeLocations: [],
+
+        goldenCoinModeButtonActive: false,
+        goldenCoinModeActive: false,
+        activeGoldenCoin: null,
+        currenGoldenCoinDistance: null,
+        closerToGoldenCoin: true,
+
+        defaultActiveLocations: [],
         activeQuestion: null,
         selectedAnswerLocationId: null,
+
         currentPosition: null,
         lastPositionMeasurement: null,
         nearbyLocationId: null,
+
         points: Alpine.$persist(0).as('hakwadagstamAR-points'),
         visitedLocations: Alpine.$persist([]).as('hakwadagstamAR-visitedLocations'),
+
         allLocations: LOCATIONS,
         allQuestions: QUESTIONS,
 
         //#region Questions
         openQuestion(id){
-            this.activeQuestion=id;
+            this.activeQuestion = id;
             Alpine.store('global').setActiveLocationSet(id);
         },
 
         closeQuestion(){
-            this.activeQuestion=null;
-            this.selectedAnswerLocationId=null;
-            this.activeLocations=[];
-            this.arModeButtonActive=false;
+            this.activeQuestion = null;
+            this.selectedAnswerLocationId = null;
+            this.activeLocations = this.defaultActiveLocations;
+            this.arModeButtonActive = false;
         },
         //#endregion
 
         //#region AR
         toggleArMode() {
-            this.arModeActive = ! this.arModeActive
+            this.arModeActive = !this.arModeActive
 
             if (!this.arModeActive) {
                 this.arModeInteractionActive = false;
@@ -77,11 +91,28 @@ document.addEventListener('alpine:init', () => {
         },
         //#endregion
 
+        //#region GoldenCoin
+
+        toggleGoldenCoinMode() {
+            this.goldenCoinModeActive = !this.goldenCoinModeActive
+
+            if(this.goldenCoinModeActive){
+                this.closeQuestion();
+            }
+            else {
+                this.activeGoldenCoin = null;
+                this.currenGoldenCoinDistance = null;
+                this.closerToGoldenCoin = true;
+            }
+        },
+
+        //#endregion
+
         //#region GPS
         setActiveLocationSet(id) {
-            this.activeLocations = this.allLocations.filter((location) => 
+            this.activeLocations.push(this.allLocations.filter((location) => 
                 location.locationSet === id
-            );
+            ));
         },
 
         getLocationUrl(id){
@@ -117,7 +148,26 @@ document.addEventListener('alpine:init', () => {
 
             if(this.arModeActive) return;
 
+            if(this.goldenCoinModeActive){
+                this.updateGoldenCoinInfo(loc);
+            }
+
+            let noGoldenCoinsNearby = true;
+
             for(let i = 0; i < this.activeLocations.length; i++){
+                if(this.activeLocations[i].locationType === "GoldenCoin"){
+                    const isInRange = this.isInRange(
+                        loc.coords, 
+                        { latitude: this.activeLocations[i].latitude, longitude: this.activeLocations[i].longitude }, 
+                        400);
+                    
+                    if(isInRange){
+                        Alpine.store('global').activeGoldenCoin = this.activeLocations[i];
+                        Alpine.store('global').goldenCoinModeButtonActive = true;
+                        noGoldenCoinsNearby = false;
+                    }
+                }
+
                 const isNearby = this.isInRange(
                     loc.coords, 
                     { latitude: this.activeLocations[i].latitude, longitude: this.activeLocations[i].longitude }, 
@@ -126,13 +176,18 @@ document.addEventListener('alpine:init', () => {
                 if(isNearby){
                     this.nearbyLocationId = this.activeLocations[i].id;
                     
-                    Alpine.store('global').arModeButtonActive = true
+                    Alpine.store('global').arModeButtonActive = true;
                     return;
                 }
             }
 
+            if(noGoldenCoinsNearby){
+                Alpine.store('global').goldenCoinModeButtonActive = false;
+                Alpine.store('global').activeGoldenCoin = null;
+            }
+
             Alpine.store('global').arModeButtonActive = false;
-                this.nearbyLocationId = null;
+            this.nearbyLocationId = null;
         },
 
         isInRange(coordsA, coordsB, maxDistance){
@@ -145,6 +200,32 @@ document.addEventListener('alpine:init', () => {
             return distance < maxDistance;
         },
 
+        updateGoldenCoinInfo(loc){
+            newDistance = haversineDistanceBetweenPoints(
+                loc.coords.latitude,
+                loc.coords.longitude,
+                this.activeGoldenCoin.latitude,
+                this.activeGoldenCoin.longitude
+            )
+
+            if(this.currenGoldenCoinDistance === null){
+                this.currenGoldenCoinDistance = newDistance;
+            }
+
+            if (Math.abs(this.currenGoldenCoinDistance - newDistance) < 5) {
+                return;
+            }
+
+            if(this.currenGoldenCoinDistance > newDistance){
+                this.closerToGoldenCoin = true;
+            }
+            else {
+                this.closerToGoldenCoin = false;
+            }
+
+            this.currenGoldenCoinDistance = newDistance;
+        },
+
         showLocationError(error) {
             switch(error.code) {
                 case error.PERMISSION_DENIED:
@@ -155,7 +236,6 @@ document.addEventListener('alpine:init', () => {
                     break;
                 case error.TIMEOUT:
                     console.log("GetCurrentPosition Timeout");
-                    //alert("Je hebt geen toestemming gegeven voor het delen van je locatie. Deze app werkt helaas niet zonder deze toestemming.");
                     break;
                 case error.UNKNOWN_ERROR:
                     alert("Er is een onbekende fout opgetreden.");
@@ -168,6 +248,9 @@ document.addEventListener('alpine:init', () => {
 })
 
 document.addEventListener('alpine:initialized', () => {
+    Alpine.store('global').defaultActiveLocations = GOLDENCOINS.filter((x) => !Alpine.store('global').visitedLocations.includes(x.id.toString()));
+    Alpine.store('global').activeLocations = Alpine.store('global').defaultActiveLocations;
+
     if (isIOS()) {
         console.log("Is IOS Device");
         DeviceOrientationEvent.requestPermission()
@@ -216,12 +299,20 @@ document.addEventListener('touchend', (e) => {
     previousTouches = [];
 });
 
-// To center the pivot of text models
+// To center the pivot of models
 document.addEventListener('object3dset', function (e) {
     if (e.detail.type === 'mesh'
         && e.target.hasAttribute('text-geometry')
     ){ 
-        setTimeout(centerModelPivot(e.target), 10);
+        setTimeout(centerModelPivotXY(e.target), 10);
+        return;
+    }
+
+    if (e.detail.type === 'mesh'
+        && e.target.hasAttribute('center-pivot-y')
+    ){ 
+        setTimeout(centerModelPivotY(e.target), 10);
+        return
     }
 });
 
@@ -239,9 +330,33 @@ AFRAME.registerComponent('correct-answer', {
             Alpine.store('global').points++;
 
             Alpine.store('global').visitedLocations.push(locationId);
-            console.log(Alpine.store('global').visitedLocations);
 
-            alert('You have have found a victory point!');
+            alert('Object geanalyseerd, 1 data-punt verzameld!');
+        });
+    }
+});
+
+AFRAME.registerComponent('golden-coin', {
+    init: function() {
+        this.el.addEventListener('click', e => {
+            const locationId = this.el.getAttribute('location-id');
+
+            if(!locationId
+                || Alpine.store('global').visitedLocations.includes(locationId)
+            ){
+                return;
+            }
+
+            Alpine.store('global').points += 3;
+
+            Alpine.store('global').visitedLocations.push(locationId);
+            
+            Alpine.store('global').defaultActiveLocations = GOLDENCOINS.filter((x) => !Alpine.store('global').visitedLocations.includes(x.id.toString()));
+            Alpine.store('global').activeLocations = Alpine.store('global').defaultActiveLocations;
+
+            Alpine.store('global').toggleGoldenCoinMode();
+
+            alert('Object geanalyseerd, 3 data-punten verzameld!');
         });
     }
 });
@@ -316,18 +431,31 @@ function getCurrentEntity() {
     return document.querySelector("a-entity[geometry], a-entity[text-geometry], a-entity[gltf-model], a-entity[obj-model]");
 }
 
-function centerModelPivot(el) {
+function centerModelPivotXY(el) {
     const mesh = el.getObject3D('mesh');
     const bbox = new THREE.Box3().setFromObject(el.object3D);
     const offsetX = (bbox.min.x - bbox.max.x) / 2;
     const offsetY = (bbox.min.y - bbox.max.y) / 2;
 
     if(!Number.isFinite(offsetX) || !Number.isFinite(offsetY)) {
-        setTimeout(centerModelPivot, 10, el);
+        setTimeout(centerModelPivotXY, 10, el);
         return; 
     }
     
     mesh.position.set(offsetX, offsetY, 0);
+}
+
+function centerModelPivotY(el) {
+    const mesh = el.getObject3D('mesh');
+    const bbox = new THREE.Box3().setFromObject(el.object3D);
+    const offsetY = (bbox.min.y - bbox.max.y) / 2;
+
+    if(!Number.isFinite(offsetY)) {
+        setTimeout(centerModelPivotY, 10, el);
+        return; 
+    }
+    
+    mesh.position.set(0, offsetY, 0);
 }
 
 function haversineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
@@ -337,9 +465,18 @@ function haversineDistanceBetweenPoints(lat1, lon1, lat2, lon2) {
     const deltaLon = lon2 - lon1;
     const deltaLambda = (deltaLon * Math.PI) / 180;
     const d = Math.acos(
-      Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(deltaLambda),
+        Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(deltaLambda),
     ) * R;
     return d;
+  }
+
+  function getHeatColorBasedonDistance(distance, maxDistance) {
+        const heatGradient = chroma
+            .scale(['0000FF', '00FFFF', 'FFEA00', 'FF6600', 'FF0000'])
+            .domain([0, 0.15, 0.4, 0.7, 1]);
+        distance = Math.min(distance, maxDistance);
+
+        return heatGradient(1 - distance / maxDistance).hex();
   }
 
   function isIOS() {

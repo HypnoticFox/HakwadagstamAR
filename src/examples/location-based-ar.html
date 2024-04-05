@@ -55,12 +55,20 @@
             previousTouches = [];
         });
 
-        // To center the pivot of text models
+        // To center the pivot of models
         document.addEventListener('object3dset', function (e) {
             if (e.detail.type === 'mesh'
                 && e.target.hasAttribute('text-geometry')
             ){ 
-                setTimeout(centerModelPivot(e.target), 10);
+                setTimeout(centerModelPivotXY(e.target), 10);
+                return;
+            }
+
+            if (e.detail.type === 'mesh'
+                && e.target.hasAttribute('center-pivot-y')
+            ){ 
+                setTimeout(centerModelPivotY(e.target), 10);
+                return
             }
         });
 
@@ -127,18 +135,31 @@
             return document.querySelector("a-entity[geometry], a-entity[text-geometry], a-entity[gltf-model], a-entity[obj-model], a-entity[fbx-model]");
         }
 
-        function centerModelPivot(el) {
+        function centerModelPivotXY(el) {
             const mesh = el.getObject3D('mesh');
             const bbox = new THREE.Box3().setFromObject(el.object3D);
             const offsetX = (bbox.min.x - bbox.max.x) / 2;
             const offsetY = (bbox.min.y - bbox.max.y) / 2;
 
             if(!Number.isFinite(offsetX) || !Number.isFinite(offsetY)) {
-                setTimeout(centerModelPivot, 10, el);
+                setTimeout(centerModelPivotXY, 10, el);
                 return; 
             }
             
             mesh.position.set(offsetX, offsetY, 0);
+        }
+
+        function centerModelPivotY(el) {
+            const mesh = el.getObject3D('mesh');
+            const bbox = new THREE.Box3().setFromObject(el.object3D);
+            const offsetY = (bbox.min.y - bbox.max.y) / 2;
+
+            if(!Number.isFinite(offsetY)) {
+                setTimeout(centerModelPivotY, 10, el);
+                return; 
+            }
+            
+            mesh.position.set(0, offsetY, 0);
         }
     </script>
 </head>
@@ -174,7 +195,7 @@
                 <a-entity light='type: ambient; color: #EEE; intensity: 0.7;'></a-entity>
         </a-entity> -->
 
-        <a-entity correct-answer 
+        <!-- <a-entity correct-answer 
             location-id='100' 
             look-at='[camera]'
         >
@@ -182,6 +203,17 @@
                 position='0 0 -3000'
                 rotation='21.139635935982472148 -23.895622466628093861 -2.7799776773372570915'
                 obj-model='obj: url(data/models/spaceship_01/SciFi_Fighter_AK5.obj); mtl: url(data/models/spaceship_01/SciFi_Fighter_AK5.mtl)'
+            ></a-entity>
+            <a-entity light='type: ambient; color: #EEE; intensity: 1;'></a-entity>
+        </a-entity> -->
+
+        <a-entity golden-coin
+            location-id='61' 
+            look-at='[camera]'
+        >
+            <a-entity center-pivot-y
+                position='0 0 -50'
+                obj-model='obj: url(data/models/alienegg/AlienEgg.obj); mtl: url(data/models/alienegg/AlienEgg.mtl)'
             ></a-entity>
             <a-entity light='type: ambient; color: #EEE; intensity: 1;'></a-entity>
         </a-entity>

@@ -2,6 +2,7 @@ var LOCATIONS = [
     {
         "id": 1,
         "locationSet": 1,
+        "locationType": "Question",
         "latitude": 52.3646163,
         "longitude": 6.4549291,
         "viewingDistance": 50,
@@ -10,6 +11,7 @@ var LOCATIONS = [
     {
         "id": 2,
         "locationSet": 1,
+        "locationType": "Question",
         "latitude": 52.3608785,
         "longitude": 6.4506238,
         "viewingDistance": 50,
@@ -18,6 +20,7 @@ var LOCATIONS = [
     {
         "id": 3,
         "locationSet": 1,
+        "locationType": "Question",
         "latitude": 52.3618106,
         "longitude": 6.4621246,
         "viewingDistance": 50,
@@ -26,6 +29,7 @@ var LOCATIONS = [
     {
         "id": 4,
         "locationSet": 2,
+        "locationType": "Question",
         "latitude": 52.3592526,
         "longitude": 6.4713527,
         "viewingDistance": 50,
@@ -34,6 +38,7 @@ var LOCATIONS = [
     {
         "id": 5,
         "locationSet": 2,
+        "locationType": "Question",
         "latitude": 52.3548043,
         "longitude": 6.4746625,
         "viewingDistance": 50,
@@ -42,6 +47,7 @@ var LOCATIONS = [
     {
         "id": 6,
         "locationSet": 2,
+        "locationType": "Question",
         "latitude": 52.3560021,
         "longitude": 6.4666144,
         "viewingDistance": 50,
@@ -50,6 +56,7 @@ var LOCATIONS = [
     {
         "id": 7,
         "locationSet": 3,
+        "locationType": "Question",
         "latitude": 52.3566222,
         "longitude": 6.4574997,
         "viewingDistance": 50,
@@ -58,6 +65,7 @@ var LOCATIONS = [
     {
         "id": 8,
         "locationSet": 3,
+        "locationType": "Question",
         "latitude": 52.3545462,
         "longitude": 6.4620227,
         "viewingDistance": 50,
@@ -66,6 +74,7 @@ var LOCATIONS = [
     {
         "id": 9,
         "locationSet": 3,
+        "locationType": "Question",
         "latitude": 52.3598476,
         "longitude": 6.4611002,
         "viewingDistance": 50,
@@ -74,6 +83,7 @@ var LOCATIONS = [
     {
         "id": 10,
         "locationSet": 4,
+        "locationType": "Question",
         "latitude": 52.3629401,
         "longitude": 6.4728974,
         "viewingDistance": 50,
@@ -82,6 +92,7 @@ var LOCATIONS = [
     {
         "id": 11,
         "locationSet": 4,
+        "locationType": "Question",
         "latitude": 52.3615158,
         "longitude": 6.4760546,
         "viewingDistance": 50,
@@ -90,6 +101,7 @@ var LOCATIONS = [
     {
         "id": 12,
         "locationSet": 4,
+        "locationType": "Question",
         "latitude": 52.3595365,
         "longitude": 6.4777336,
         "viewingDistance": 50,
@@ -98,6 +110,7 @@ var LOCATIONS = [
     {
         "id": 13,
         "locationSet": 5,
+        "locationType": "Question",
         "latitude": 52.3562937,
         "longitude": 6.4860247,
         "viewingDistance": 50,
@@ -106,6 +119,7 @@ var LOCATIONS = [
     {
         "id": 14,
         "locationSet": 5,
+        "locationType": "Question",
         "latitude": 52.3548325,
         "longitude": 6.4820024,
         "viewingDistance": 50,
@@ -114,6 +128,7 @@ var LOCATIONS = [
     {
         "id": 15,
         "locationSet": 5,
+        "locationType": "Question",
         "latitude": 52.3547515,
         "longitude": 6.4887096,
         "viewingDistance": 50,
@@ -122,6 +137,7 @@ var LOCATIONS = [
     {
         "id": 16,
         "locationSet": 6,
+        "locationType": "Question",
         "latitude": 52.3517786,
         "longitude": 6.4629117,
         "viewingDistance": 50,
@@ -130,6 +146,7 @@ var LOCATIONS = [
     {
         "id": 17,
         "locationSet": 6,
+        "locationType": "Question",
         "latitude": 52.3555361,
         "longitude": 6.4577059,
         "viewingDistance": 50,
@@ -138,6 +155,7 @@ var LOCATIONS = [
     {
         "id": 18,
         "locationSet": 6,
+        "locationType": "Question",
         "latitude": 52.3556029,
         "longitude": 6.4643524,
         "viewingDistance": 50,
@@ -146,6 +164,7 @@ var LOCATIONS = [
     {
         "id": 19,
         "locationSet": 7,
+        "locationType": "Question",
         "latitude": 52.351455,
         "longitude": 6.4771444,
         "viewingDistance": 50,
@@ -154,6 +173,7 @@ var LOCATIONS = [
     {
         "id": 20,
         "locationSet": 7,
+        "locationType": "Question",
         "latitude": 52.3545261,
         "longitude": 6.4680535,
         "viewingDistance": 50,
@@ -162,6 +182,7 @@ var LOCATIONS = [
     {
         "id": 21,
         "locationSet": 7,
+        "locationType": "Question",
         "latitude": 52.3575263,
         "longitude": 6.4766239,
         "viewingDistance": 50,
@@ -170,6 +191,7 @@ var LOCATIONS = [
     {
         "id": 22,
         "locationSet": 8,
+        "locationType": "Question",
         "latitude": 52.360255,
         "longitude": 6.4599736,
         "viewingDistance": 50,
@@ -178,6 +200,7 @@ var LOCATIONS = [
     {
         "id": 23,
         "locationSet": 8,
+        "locationType": "Question",
         "latitude": 52.3627839,
         "longitude": 6.4637684,
         "viewingDistance": 50,
@@ -186,6 +209,7 @@ var LOCATIONS = [
     {
         "id": 24,
         "locationSet": 8,
+        "locationType": "Question",
         "latitude": 52.3601543,
         "longitude": 6.4648856,
         "viewingDistance": 50,
@@ -194,6 +218,7 @@ var LOCATIONS = [
     {
         "id": 25,
         "locationSet": 9,
+        "locationType": "Question",
         "latitude": 52.3631468,
         "longitude": 6.4535864,
         "viewingDistance": 50,
@@ -202,6 +227,7 @@ var LOCATIONS = [
     {
         "id": 26,
         "locationSet": 9,
+        "locationType": "Question",
         "latitude": 52.3605927,
         "longitude": 6.4567102,
         "viewingDistance": 50,
@@ -210,6 +236,7 @@ var LOCATIONS = [
     {
         "id": 27,
         "locationSet": 9,
+        "locationType": "Question",
         "latitude": 52.3579821,
         "longitude": 6.4547809,
         "viewingDistance": 50,
@@ -218,6 +245,7 @@ var LOCATIONS = [
     {
         "id": 28,
         "locationSet": 10,
+        "locationType": "Question",
         "latitude": 52.3543093,
         "longitude": 6.4729217,
         "viewingDistance": 50,
@@ -226,6 +254,7 @@ var LOCATIONS = [
     {
         "id": 29,
         "locationSet": 10,
+        "locationType": "Question",
         "latitude": 52.3534227,
         "longitude": 6.4688455,
         "viewingDistance": 50,
@@ -234,6 +263,7 @@ var LOCATIONS = [
     {
         "id": 30,
         "locationSet": 10,
+        "locationType": "Question",
         "latitude": 52.351328,
         "longitude": 6.4752997,
         "viewingDistance": 50,
@@ -242,6 +272,7 @@ var LOCATIONS = [
     {
         "id": 31,
         "locationSet": 11,
+        "locationType": "Question",
         "latitude": 52.3534049,
         "longitude": 6.4857771,
         "viewingDistance": 50,
@@ -250,6 +281,7 @@ var LOCATIONS = [
     {
         "id": 32,
         "locationSet": 11,
+        "locationType": "Question",
         "latitude": 52.3554961,
         "longitude": 6.4837438,
         "viewingDistance": 50,
@@ -258,6 +290,7 @@ var LOCATIONS = [
     {
         "id": 33,
         "locationSet": 11,
+        "locationType": "Question",
         "latitude": 52.3558975,
         "longitude": 6.4882328,
         "viewingDistance": 50,
@@ -266,6 +299,7 @@ var LOCATIONS = [
     {
         "id": 34,
         "locationSet": 12,
+        "locationType": "Question",
         "latitude": 52.3626431,
         "longitude": 6.462808,
         "viewingDistance": 50,
@@ -274,6 +308,7 @@ var LOCATIONS = [
     {
         "id": 35,
         "locationSet": 12,
+        "locationType": "Question",
         "latitude": 52.3645808,
         "longitude": 6.4640778,
         "viewingDistance": 50,
@@ -282,6 +317,7 @@ var LOCATIONS = [
     {
         "id": 36,
         "locationSet": 12,
+        "locationType": "Question",
         "latitude": 52.3633049,
         "longitude": 6.4679233,
         "viewingDistance": 50,
@@ -290,6 +326,7 @@ var LOCATIONS = [
     {
         "id": 37,
         "locationSet": 13,
+        "locationType": "Question",
         "latitude": 52.3562328,
         "longitude": 6.4677359,
         "viewingDistance": 50,
@@ -298,6 +335,7 @@ var LOCATIONS = [
     {
         "id": 38,
         "locationSet": 13,
+        "locationType": "Question",
         "latitude": 52.3583928,
         "longitude": 6.4690982,
         "viewingDistance": 50,
@@ -306,6 +344,7 @@ var LOCATIONS = [
     {
         "id": 39,
         "locationSet": 13,
+        "locationType": "Question",
         "latitude": 52.3581364,
         "longitude": 6.4651879,
         "viewingDistance": 50,
@@ -314,6 +353,7 @@ var LOCATIONS = [
     {
         "id": 40,
         "locationSet": 14,
+        "locationType": "Question",
         "latitude": 52.3608945,
         "longitude": 6.4782477,
         "viewingDistance": 50,
@@ -322,6 +362,7 @@ var LOCATIONS = [
     {
         "id": 41,
         "locationSet": 14,
+        "locationType": "Question",
         "latitude": 52.362045,
         "longitude": 6.4737324,
         "viewingDistance": 50,
@@ -330,6 +371,7 @@ var LOCATIONS = [
     {
         "id": 42,
         "locationSet": 14,
+        "locationType": "Question",
         "latitude": 52.3601889,
         "longitude": 6.4751648,
         "viewingDistance": 50,
@@ -338,6 +380,7 @@ var LOCATIONS = [
     {
         "id": 43,
         "locationSet": 15,
+        "locationType": "Question",
         "latitude": 52.3543447,
         "longitude": 6.461996,
         "viewingDistance": 50,
@@ -346,6 +389,7 @@ var LOCATIONS = [
     {
         "id": 44,
         "locationSet": 15,
+        "locationType": "Question",
         "latitude": 52.3536574,
         "longitude": 6.4579134,
         "viewingDistance": 50,
@@ -354,6 +398,7 @@ var LOCATIONS = [
     {
         "id": 45,
         "locationSet": 15,
+        "locationType": "Question",
         "latitude": 52.3520354,
         "longitude": 6.4647359,
         "viewingDistance": 50,
@@ -362,6 +407,7 @@ var LOCATIONS = [
     {
         "id": 46,
         "locationSet": 16,
+        "locationType": "Question",
         "latitude": 52.3588811,
         "longitude": 6.4554383,
         "viewingDistance": 50,
@@ -370,6 +416,7 @@ var LOCATIONS = [
     {
         "id": 47,
         "locationSet": 16,
+        "locationType": "Question",
         "latitude": 52.3608146,
         "longitude": 6.4524452,
         "viewingDistance": 50,
@@ -378,6 +425,7 @@ var LOCATIONS = [
     {
         "id": 48,
         "locationSet": 16,
+        "locationType": "Question",
         "latitude": 52.3580182,
         "longitude": 6.459349,
         "viewingDistance": 50,
@@ -386,6 +434,7 @@ var LOCATIONS = [
     {
         "id": 49,
         "locationSet": 17,
+        "locationType": "Question",
         "latitude": 52.3540749,
         "longitude": 6.4830987,
         "viewingDistance": 50,
@@ -394,6 +443,7 @@ var LOCATIONS = [
     {
         "id": 50,
         "locationSet": 17,
+        "locationType": "Question",
         "latitude": 52.3560696,
         "longitude": 6.4842744,
         "viewingDistance": 50,
@@ -402,6 +452,7 @@ var LOCATIONS = [
     {
         "id": 51,
         "locationSet": 17,
+        "locationType": "Question",
         "latitude": 52.35455,
         "longitude": 6.4879332,
         "viewingDistance": 50,
@@ -410,6 +461,7 @@ var LOCATIONS = [
     {
         "id": 52,
         "locationSet": 18,
+        "locationType": "Question",
         "latitude": 52.3595416,
         "longitude": 6.4660818,
         "viewingDistance": 50,
@@ -418,6 +470,7 @@ var LOCATIONS = [
     {
         "id": 53,
         "locationSet": 18,
+        "locationType": "Question",
         "latitude": 52.3611162,
         "longitude": 6.4640673,
         "viewingDistance": 50,
@@ -426,6 +479,7 @@ var LOCATIONS = [
     {
         "id": 54,
         "locationSet": 18,
+        "locationType": "Question",
         "latitude": 52.3620941,
         "longitude": 6.4674447,
         "viewingDistance": 50,
@@ -434,6 +488,7 @@ var LOCATIONS = [
     {
         "id": 55,
         "locationSet": 19,
+        "locationType": "Question",
         "latitude": 52.3532977,
         "longitude": 6.4698744,
         "viewingDistance": 50,
@@ -442,6 +497,7 @@ var LOCATIONS = [
     {
         "id": 56,
         "locationSet": 19,
+        "locationType": "Question",
         "latitude": 52.3554141,
         "longitude": 6.4736147,
         "viewingDistance": 50,
@@ -450,6 +506,7 @@ var LOCATIONS = [
     {
         "id": 57,
         "locationSet": 19,
+        "locationType": "Question",
         "latitude": 52.3518337,
         "longitude": 6.4742387,
         "viewingDistance": 50,
@@ -458,6 +515,7 @@ var LOCATIONS = [
     {
         "id": 58,
         "locationSet": 20,
+        "locationType": "Question",
         "latitude": 52.3608174,
         "longitude": 6.4532124,
         "viewingDistance": 50,
@@ -466,6 +524,7 @@ var LOCATIONS = [
     {
         "id": 59,
         "locationSet": 20,
+        "locationType": "Question",
         "latitude": 52.3641857,
         "longitude": 6.4562954,
         "viewingDistance": 50,
@@ -474,6 +533,7 @@ var LOCATIONS = [
     {
         "id": 60,
         "locationSet": 20,
+        "locationType": "Question",
         "latitude": 52.3611773,
         "longitude": 6.4589333,
         "viewingDistance": 50,

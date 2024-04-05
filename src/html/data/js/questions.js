@@ -295,20 +295,20 @@ var QUESTIONS = [
     },
     {
         "id": 15,
-        "text": "Question15",
+        "text": "Wat is de naam van de agent die Will Smith speelt in Men in Black?",
         "answers": [
             {
-                "text": "Fout",
+                "text": "Agent K",
                 "correct": false,
                 "locationId": 44
             },
             {
-                "text": "Goed",
+                "text": "Agent J",
                 "correct": true,
                 "locationId": 43
             },
             {
-                "text": "Fout",
+                "text": "Agent D",
                 "correct": false,
                 "locationId": 45
             }
@@ -316,20 +316,20 @@ var QUESTIONS = [
     },
     {
         "id": 16,
-        "text": "Question16",
+        "text": 'Welke geheim agent word ook wel "the man for all seasons" genoemd?',
         "answers": [
             {
-                "text": "Fout",
+                "text": "Austin Powers",
                 "correct": false,
                 "locationId": 47
             },
             {
-                "text": "Goed",
+                "text": "Johnny English",
                 "correct": true,
                 "locationId": 46
             },
             {
-                "text": "Fout",
+                "text": "James Bond",
                 "correct": false,
                 "locationId": 48
             }
@@ -337,20 +337,20 @@ var QUESTIONS = [
     },
     {
         "id": 17,
-        "text": "Question17",
+        "text": "Wie schreef de James Bond boeken?",
         "answers": [
             {
-                "text": "Fout",
-                "correct": false,
-                "locationId": 50
-            },
-            {
-                "text": "Goed",
+                "text": "Ian Fleming",
                 "correct": true,
                 "locationId": 49
             },
             {
-                "text": "Fout",
+                "text": "Tom Clancy",
+                "correct": false,
+                "locationId": 50
+            },
+            {
+                "text": "John le Carré",
                 "correct": false,
                 "locationId": 51
             }
@@ -358,20 +358,20 @@ var QUESTIONS = [
     },
     {
         "id": 18,
-        "text": "Question18",
+        "text": "Welke handlanger van Dr. Evil, uit de Austin Powers films, is verantwoordelijk voor de financiën?",
         "answers": [
             {
-                "text": "Fout",
+                "text": "Frau Farbissina",
                 "correct": false,
                 "locationId": 53
             },
             {
-                "text": "Goed",
+                "text": "Number 2",
                 "correct": true,
                 "locationId": 52
             },
             {
-                "text": "Fout",
+                "text": "Fat Bastard",
                 "correct": false,
                 "locationId": 54
             }
@@ -379,20 +379,20 @@ var QUESTIONS = [
     },
     {
         "id": 19,
-        "text": "Question19",
+        "text": 'Wat was het front van de geheime dienst in "Kingsman: The Secret Service"?',
         "answers": [
             {
-                "text": "Fout",
+                "text": "Een hotel",
                 "correct": false,
                 "locationId": 56
             },
             {
-                "text": "Goed",
+                "text": "Eeen kleermaker",
                 "correct": true,
                 "locationId": 55
             },
             {
-                "text": "Fout",
+                "text": "Een kroeg",
                 "correct": false,
                 "locationId": 57
             }
@@ -400,20 +400,20 @@ var QUESTIONS = [
     },
     {
         "id": 20,
-        "text": "Question20",
+        "text": "De geheim dienst in de Mission Impossible filmreeks heet IMF. Waar staat IMF voor?",
         "answers": [
             {
-                "text": "Fout",
+                "text": "Impossible Missions Federation",
                 "correct": false,
                 "locationId": 59
             },
             {
-                "text": "Fout",
+                "text": "Impossible Missions Firm",
                 "correct": false,
                 "locationId": 60
             },
             {
-                "text": "Goed",
+                "text": "Impossible Missions Force",
                 "correct": true,
                 "locationId": 58
             }

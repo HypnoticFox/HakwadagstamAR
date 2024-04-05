@@ -1,0 +1,11 @@
+newmtl AlienEggSG
+illum 4
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 18.00
+map_Kd textures/M_AlienEgg_Base_color.png
+map_Ns textures/M_AlienEgg_Roughness.png
+map_refl textures/M_AlienEgg_Metallic.png
+map_Bump M_AlienEgg_Normal_OpenGL.png

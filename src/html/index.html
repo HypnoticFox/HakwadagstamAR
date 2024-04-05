@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xml:lang="en" xmlns= "http://www.w3.org/1999/xhtml" data-theme="dark">
 <head>
-    <title>Hakwagstam AR</title>
+    <title>Project AR</title>
 
     <meta charset="utf-8">
     <meta name="google" content="notranslate">  
@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="main.css"/>
 
     <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Michroma">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Mono">
 
     <!-- Alpine Plugins -->
     <script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
@@ -29,24 +31,57 @@
     <script type='text/javascript' src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@7.2.0/dist/aframe-extras.min.js"></script>
     <script type='text/javascript' src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
 
+    <!-- Other JS Utilities -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js" integrity="sha512-zInFF17qBFVvvvFpIfeBzo7Tj7+rQxLeTJDmbxjBz5/zIr89YVbTNelNhdTT+/DCrxoVzBeUPVFJsczKbB7sew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <!-- Our Js -->
     <script src="data/js/locations.js"></script>
     <script src="data/js/questions.js"></script>
+    <script src="data/js/goldenCoins.js"></script>
     <script src="main.js"></script>
 
 </head>
 <body x-data>
-    <main x-show="!$store.global.arModeActive">
+    <main x-cloak x-show="!$store.global.seenIntro">
         <div class="container">
-            <h1>Hakwadagstam AR app</h1>
+            <span class="typewriter" style="
+                --delay: 1s; 
+                --n-chars: 225;
+                ">
+                We hebben jullie hulp hard nodig.
+                Deze app bevat alles wat jullie nodig zullen hebben.
+                Alles wat je te leren komt via deze app is uiterst vertrouwelijk en mag nooit met anderen gedeeld worden.
 
-            <h3>
-                Points: <span x-text="$store.global.points"></span>
-            </h3>
+                Ga je akkoord met deze voorwaarden?
+            </span>
+
+            <button id="intro-accept-button"
+                @click="$store.global.seenIntro = true"
+                style="
+                    display: none;
+                    margin: calc(2 * var(--pico-spacing)) auto;
+                "
+                x-init="setTimeout(() => { document.getElementById('intro-accept-button').style.display = 'block' }, 225 * 100 + 1000)"
+            >
+                Akkoord</button>
+        </div>
+    </main>
+
+    <main x-cloak x-show="!$store.global.arModeActive && $store.global.seenIntro">
+        <div class="container">
+            <!-- So the Golden Coin mode button wont cover any content -->
+            <div x-show="$store.global.goldenCoinModeButtonActive" style="height: 6em; width: 100%; top: 0;"></div>
+
+            <h1>Project AR</h1>
+
+            <h4 style="white-space: pre-line;">
+                Geanalyseerde
+                Data-punten: <span x-text="$store.global.points"></span>
+            </h4>
 
             <!-- List with all questions -->
-            <div x-show="!$store.global.activeQuestion">
-                <h3>Kies de vraag die je wil beantwoorden</h3>
+            <div class="mt-1" x-cloak x-show="!$store.global.activeQuestion && !$store.global.goldenCoinModeActive">
+                <p>Kies het signaal dat je wilt onderzoeken</p>
                 <div class="grid">
                     <template x-for="(question) in $store.global.allQuestions" :key="question.id">
                         <button 
@@ -59,7 +94,7 @@
             </div>
 
             <!--Show active question-->
-            <div x-show="$store.global.activeQuestion">
+            <div x-cloak x-show="$store.global.activeQuestion">
                 <div>
                     <h5 x-html="$store.global.allQuestions.find((question)=>question.id==$store.global.activeQuestion)?.text ?? '' "></h5>
                     <div class="grid">
@@ -73,11 +108,11 @@
                         </template>
                     </div>
 
-                    <div
+                    <div x-cloak
                         x-show="$store.global.selectedAnswerLocationId"
                         class="mt-1"
                     >
-                        <p class="mb-0">Ga naar de volgende locatie en activeer daar de AR</p>
+                        <p class="mb-0">Ga naar de volgende locatie en activeer daar de AR modus</p>
 
                         <iframe id="gmap"
                             loading="lazy"
@@ -89,22 +124,36 @@
                     </div>
                     
                     <div class="mt-2">
-                        <button class="secondary outline" @click="$store.global.closeQuestion()">Terug naar vragen overzicht</button>
+                        <button class="secondary outline" @click="$store.global.closeQuestion()">Terug naar het signalen overzicht</button>
                     </div>
                 </div>
             </div>
+
+            <div x-cloak x-show="$store.global.goldenCoinModeActive"
+                :style="$store.global.currenGoldenCoinDistance !== null && {'background-color': getHeatColorBasedonDistance($store.global.currenGoldenCoinDistance, 500)}" 
+                id="golden-coin-mode-div"
+            >
+                <h1 class="my-3" style="text-align: center;" x-text="$store.global.closerToGoldenCoin ? 'Warmer' : 'Kouder'" ></h3>
+            </div>
+
+            <!-- So the AR mode button wont cover any content -->
+            <div x-show="$store.global.arModeButtonActive" style="height: 6em; width: 100%; bottom: 0;"></div>
         </div>
-        
-        <!-- So the AR mode button wont cover any content -->
-        <div style="height: 5em; width: 100%;"></div>
     </main>
 
     <button id="AR-toggle"
         @click="$store.global.toggleArMode()"
         :class="$store.global.arModeActive ? 'ar-toggle-on arjs-loader' : 'ar-toggle-off arjs-loader'"
         x-text="$store.global.arModeActive ? 'Exit AR' : 'Enter AR'"
-        x-show="$store.global.arModeButtonActive"
+        x-show="$store.global.seenIntro && $store.global.arModeButtonActive"
     >Toggle AR</button>
+
+    <button id="GoldenCoinMode-toggle"
+        @click="$store.global.toggleGoldenCoinMode()"
+        :class="$store.global.goldenCoinModeActive ? 'golden-coin-mode-toggle-on' : 'golden-coin-mode-toggle-off'"
+        x-text="$store.global.goldenCoinModeActive ? 'Exit Radar Mode' : 'Enter Radar Mode'"
+        x-show="$store.global.seenIntro && !$store.global.arModeActive && ($store.global.goldenCoinModeActive || $store.global.goldenCoinModeButtonActive)"
+    >Toggle Golden Coin Mode</button>
      
     <template x-if="$store.global.arModeActive">
         <div id="ar-main" x-init="$nextTick(() => { $store.global.initArMode(); })">

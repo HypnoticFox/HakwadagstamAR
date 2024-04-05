@@ -151,6 +151,7 @@ with open(args.input_filepath, 'r') as f:
             SimpleNamespace(
                 id=id,
                 locationSet=int(data["features"][i]["properties"]["Name"].split()[1]),
+                locationType="Question",
                 latitude=latitude,
                 longitude=longitude,
                 viewingDistance=50,
