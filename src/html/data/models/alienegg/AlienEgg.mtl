@@ -8,4 +8,4 @@ Ns 18.00
 map_Kd textures/M_AlienEgg_Base_color.png
 map_Ns textures/M_AlienEgg_Roughness.png
 map_refl textures/M_AlienEgg_Metallic.png
-map_Bump M_AlienEgg_Normal_OpenGL.png
+map_Bump textures/M_AlienEgg_Normal_OpenGL.png
