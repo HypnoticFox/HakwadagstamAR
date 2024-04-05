@@ -110,7 +110,7 @@ document.addEventListener('alpine:init', () => {
 
         //#region GPS
         setActiveLocationSet(id) {
-            this.activeLocations.concat(this.allLocations.filter((location) => 
+            this.activeLocations= this.activeLocations.concat(this.allLocations.filter((location) => 
                 location.locationSet === id
             ));
         },
